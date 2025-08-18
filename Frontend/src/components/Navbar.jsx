@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import logo from "../assets/logo3.jpg";
 
 const Navbar = () => {
   const location = useLocation();
@@ -16,8 +17,11 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-farm-green rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">🌾</span>
+              <div className="w-10 h-10  flex items-center rounded-xl justify-center shadow-lg">
+                <img
+                  src={logo}
+                  className="rounded-2xl"
+                  alt="Kisan Saathi Logo"></img>
               </div>
               <span className="text-2xl font-bold text-gray-800">
                 Kisan Saathi

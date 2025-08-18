@@ -1,3 +1,5 @@
+import AlertCard from "../components/AlertCard";
+
 const FarmerDashboard = () => {
   // Mock data for current crops
   const currentCrops = [
@@ -40,21 +42,31 @@ const FarmerDashboard = () => {
   const pestDetections = [
     {
       id: 1,
+      type: "Fungal Disease",
       crop: "Rice",
       disease: "Brown Spot",
       severity: "Medium",
       detectedAt: "2024-03-10T10:30:00Z",
       location: "Field A - Section 2",
       confidence: 92,
+      description:
+        "Brown Spot is a common rice disease that causes brown lesions on leaves, reducing photosynthesis and grain quality if left unmanaged.",
+      recommendation:
+        "Apply balanced nitrogen fertilizer and consider a fungicide spray if humidity remains high. Monitor nearby sections for spread.",
     },
     {
       id: 2,
+      type: "Fungal Disease",
       crop: "Wheat",
       disease: "Yellow Rust",
       severity: "Low",
       detectedAt: "2024-03-08T14:15:00Z",
       location: "Field B - Section 1",
       confidence: 87,
+      description:
+        "Yellow Rust affects wheat leaves with yellow-orange pustules, slowing growth and lowering yield potential in severe cases.",
+      recommendation:
+        "Regularly scout surrounding areas. If rust spots increase, apply a preventive fungicide. Ensure proper crop spacing for airflow.",
     },
   ];
 
@@ -261,6 +273,18 @@ const FarmerDashboard = () => {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Pest Detection Results */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold text-gray mb-6">
+            Pest & Disease Detection{" "}
+          </h2>
+          <div className="space-y-6">
+            {pestDetections.map((detection) => (
+              <AlertCard key={detection.id} alert={detection} />
+            ))}
           </div>
         </div>
 
