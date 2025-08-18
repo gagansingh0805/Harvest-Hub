@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
+import logo from "../assets/logo3.jpg";
 
 const Navbar = () => {
   const location = useLocation();
@@ -25,8 +26,11 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-farm-green rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-lg">🌾</span>
+              <div className="w-12 h-12  flex items-center justify-center shadow-lg">
+                <img
+                  src={logo}
+                  className="rounded-2xl"
+                  alt="Kisan Saathi Logo"></img>
               </div>
               <span className="text-2xl font-bold text-gray-800">
                 Kisan Saathi
@@ -40,24 +44,21 @@ const Navbar = () => {
               to="/"
               className={`${isActive(
                 "/"
-              )} transition-all duration-200 font-medium`}
-            >
+              )} transition-all duration-200 font-medium`}>
               Home
             </Link>
             <Link
               to="/farmer"
               className={`${isActive(
                 "/farmer"
-              )} transition-all duration-200 font-medium`}
-            >
+              )} transition-all duration-200 font-medium`}>
               Farmer Dashboard
             </Link>
             <Link
               to="/advisor"
               className={`${isActive(
                 "/advisor"
-              )} transition-all duration-200 font-medium`}
-            >
+              )} transition-all duration-200 font-medium`}>
               Advisor Dashboard
             </Link>
             {!user ? (
@@ -66,8 +67,7 @@ const Navbar = () => {
                   to="/login"
                   className={`${isActive(
                     "/login"
-                  )} transition-all duration-200 font-medium`}
-                >
+                  )} transition-all duration-200 font-medium`}>
                   Login
                 </Link>
                 <Link to="/signup" className="btn-primary">
@@ -91,8 +91,7 @@ const Navbar = () => {
                 className="w-6 h-6"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+                viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
