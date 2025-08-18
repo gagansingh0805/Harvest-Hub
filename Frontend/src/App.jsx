@@ -3,6 +3,8 @@ import HomePage from "./pages/HomePage";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import SignupPage from "./pages/Auth/SignUpPage";
+import LoginPage from "./pages/Auth/LoginPage";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             {/* <Route path="/advisor" element={<AdvisorDashboard />} /> */}
             {/* <Route path="/login" element={<LoginPage />} /> */}
             {/* <Route path="/signup" element={<SignupPage />} /> */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
           </Routes>
         </main>
         <Footer />
