@@ -4,6 +4,7 @@ import FarmerDashboard from "./pages/FarmerDashboard";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SignupPage from "./pages/Auth/SignUpPage";
+import AdvisorDashboard from "./pages/AdvisorDashboard";
 import LoginPage from "./pages/Auth/LoginPage";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/farmer" element={<FarmerDashboard />} />
-            {/* <Route path="/advisor" element={<AdvisorDashboard />} /> */}
+            <Route path="/advisor" element={<AdvisorDashboard />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
           </Routes>
