@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserProvider";
-import logo from "../assets/logo3.jpg";
+import logo from "../assets/logo3-removebg-preview.png";
 
 const Navbar = () => {
   const location = useLocation();
@@ -24,12 +24,12 @@ const Navbar = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-3">
-              <div className="w-12 h-12  flex items-center justify-center shadow-lg">
+          <div className="flex items-center -ml-5">
+            <Link to="/" className="flex items-center space-x-0">
+              <div className=" flex items-center justify-center ">
                 <img
                   src={logo}
-                  className="rounded-2xl"
+                  className=" w-20 h-20"
                   alt="Kisan Saathi Logo"></img>
               </div>
               <span className="text-2xl font-bold text-gray-800">

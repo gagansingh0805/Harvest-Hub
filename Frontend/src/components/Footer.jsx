@@ -1,4 +1,4 @@
-import logo from "../assets/logo3.jpg";
+import logo from "../assets/logo3-removebg-preview.png";
 
 const Footer = () => {
   return (
@@ -6,11 +6,11 @@ const Footer = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-            <div className="flex items-center space-x-3 mb-6 md:mb-0">
-              <div className="w-8 h-8  rounded-lg flex items-center justify-center shadow-lg">
+            <div className="flex items-center space-x-1 mb-6 md:mb-0">
+              <div className=" flex items-center justify-center shadow-lg">
                 <img
                   src={logo}
-                  className="rounded-2xl"
+                  className=" w-12 h-12"
                   alt="Kisan Saathi Logo"></img>
               </div>
               <span className="text-xl font-semibold">Kisan Saathi</span>

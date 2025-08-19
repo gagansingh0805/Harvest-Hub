@@ -73,7 +73,7 @@ const AlertCard = ({ alert }) => {
           </div>
 
           <div className="mb-4">
-            <p className="text-gray-700">{data.description}</p>
+            <p className="text-red-500">{data.description}</p>
           </div>
 
           <div className="bg-white p-3 rounded-lg border border-orange-200">
