@@ -25,7 +25,7 @@ const LoginPage = () => {
       console.log("Login response:", res);
 
       updateUser(res); // save user + token
-      navigate("/farmer");
+      navigate("/");
     } catch (err) {
       console.error(err.response?.data); // see exact error from API
 
