@@ -1,7 +1,7 @@
 const express = require("express")
 const { signup, login,getProfile } = require("../controllers/authControllers")
 const router = express.Router()
-const {protect}= require("../middlewares/authMiddlewares")
+const {protect}= require("../middlewares/authMiddlewares.js")
 
 // @route   POST /api/auth/register
 // @desc    Register new user

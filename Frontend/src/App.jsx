@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import SignupPage from "./pages/Auth/SignUpPage";
 import AdvisorDashboard from "./pages/AdvisorDashboard";
 import LoginPage from "./pages/Auth/LoginPage";
+import PlantUploader from "./components/PlantUploader";
 
 function App() {
   return (

@@ -1,7 +1,10 @@
 const express = require("express")
 const cors = require('cors')
 const connectDb = require("./config/db")
-const authRoutes=require("./routes/authRoutes")
+
+const authRoutes = require("./routes/authRoutes")
+const plantRoutes = require( "./routes/plantRoutes")
+
 
 require("dotenv").config();
 connectDb();
@@ -21,6 +24,7 @@ app.use(express.json());
 
 //Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/plants", plantRoutes);
 
 
 
