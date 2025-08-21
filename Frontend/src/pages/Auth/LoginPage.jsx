@@ -22,12 +22,12 @@ const LoginPage = () => {
     setError("");
     try {
       const res = await login(formData);
-      console.log("Login response:", res);
+      // console.log("Login response:", res);
 
       updateUser(res); // save user + token
       navigate("/");
     } catch (err) {
-      console.error(err.response?.data); // see exact error from API
+      // console.error(err.response?.data); // see exact error from API
 
       setError(err.response?.data?.message || "Login failed. Try again.");
     }

@@ -1,5 +1,5 @@
 import WeatherCard from "../components/WeatherCard";
-import PlantUploader from "../components/PlantUploader"; 
+import PlantUploader from "../components/PlantUploader";
 import { Link } from "react-router-dom";
 import { useContext, useRef } from "react";
 import { UserContext } from "../context/UserProvider";
@@ -65,7 +65,7 @@ const HomePage = () => {
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
               {user ? (
                 <Link
-                  to="/farmer-dashboard"
+                  to="/farmer"
                   className="bg-white text-farm-dark-green font-bold py-4 px-10 rounded-xl hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
                   Get Started
                 </Link>
@@ -92,7 +92,6 @@ const HomePage = () => {
           <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
             Farm Overview
           </h2>
-
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {Object.entries(overviewData).map(([key, data]) => (
               <div
@@ -114,43 +113,41 @@ const HomePage = () => {
               </div>
             ))}
           </div>
-
           {/* Main card area */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            <div>
-              
+            {/* Left Column → Weather + Recommendations */}
+            <div className="grid gap-6">
               <WeatherCard />
-              
+
+              <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+                  🌱 Recommended Crops
+                </h3>
+                <ul className="space-y-4 text-lg text-gray-700">
+                  <li className="flex items-center gap-2">
+                    <span>🌾</span> Rice – Good for current season
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span>🌿</span> Wheat – Suitable for dry weather
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span>🍅</span> Tomato – Best for humid regions
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div className="w-full mx-auto mb-16">
-              <div className="max-w-md sm:max-w-lg md:max-w-xl lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl w-full mx-auto">
+
+            {/* Right Column → Plant Uploader */}
+            <div className="flex items-start justify-center">
+              <div className="w-full max-w-xl">
                 <PlantUploader />
               </div>
             </div>
           </div>
 
-          {/* 🌱 Crop Recommendations + 📊 Market Prices */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Crop Recommendations */}
-            <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-                🌱 Recommended Crops
-              </h3>
-              <ul className="space-y-4 text-lg text-gray-700">
-                <li className="flex items-center gap-2">
-                  <span>🌾</span> Rice – Good for current season
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>🌿</span> Wheat – Suitable for dry weather
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>🍅</span> Tomato – Best for humid regions
-                </li>
-              </ul>
-            </div>
+          {/* Market Prices */}
 
-            {/* Market Prices */}
-             /* <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+          {/* <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
               <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                 📊 Market Price Trends
               </h3>
@@ -180,9 +177,7 @@ const HomePage = () => {
                   </tr>
                 </tbody>
               </table>
-            </div>
-          </div>   */
-          
+            </div> */}
 
           {/* Features Section */}
           <div className="section-gradient rounded-3xl p-12 mb-16">
@@ -225,7 +220,6 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-
           {/* Quick Stats */}
           <div className="card mb-16">
             <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">
@@ -259,7 +253,6 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-
           {/* Learn More Section */}
           <div ref={learnMoreRef} className="section-gradient rounded-3xl p-12">
             <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
@@ -272,18 +265,19 @@ const HomePage = () => {
                   🚜 What is Kisan Saathi?
                 </h3>
                 <p className="mb-6">
-                  Kisan Saathi is your AI-powered digital farming partner. It helps 
-                  farmers detect crop health, pests, and diseases early, provides 
-                  irrigation guidance, and offers localized weather updates.
+                  Kisan Saathi is your AI-powered digital farming partner. It
+                  helps farmers detect crop health, pests, and diseases early,
+                  provides irrigation guidance, and offers localized weather
+                  updates.
                 </p>
 
                 <h3 className="text-2xl font-semibold text-farm-dark-green mb-4">
                   🌾 Our Mission
                 </h3>
                 <p>
-                  To empower every farmer with simple, affordable, and sustainable 
-                  technology that improves crop yield, reduces costs, and protects 
-                  the environment.
+                  To empower every farmer with simple, affordable, and
+                  sustainable technology that improves crop yield, reduces
+                  costs, and protects the environment.
                 </p>
               </div>
 
@@ -303,8 +297,8 @@ const HomePage = () => {
                   📈 Impact
                 </h3>
                 <p>
-                  Already serving thousands of farmers across regions, helping them 
-                  save resources and improve productivity sustainably.
+                  Already serving thousands of farmers across regions, helping
+                  them save resources and improve productivity sustainably.
                 </p>
               </div>
             </div>
