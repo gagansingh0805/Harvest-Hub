@@ -4,10 +4,12 @@ import { Link } from "react-router-dom";
 import { useContext, useRef } from "react";
 import { UserContext } from "../context/UserProvider";
 
+// Testing Git push - Ayush
+
 const HomePage = () => {
   const { user } = useContext(UserContext);
- 
-   // Mock data for overview cards
+
+  // Mock data for overview cards
   const overviewData = {
     farmStatus: {
       title: "Farm Status",
@@ -69,14 +71,12 @@ const HomePage = () => {
                   Get Started
                 </Link>
               )}
-          
+
               <Link
                 to="/learn-more"
-                className="border-2 border-white text-white font-bold py-4 px-10 rounded-xl hover:bg-white hover:text-farm-dark-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
-              >
+                className="border-2 border-white text-white font-bold py-4 px-10 rounded-xl hover:bg-white hover:text-farm-dark-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
                 Learn More
               </Link>
-
             </div>
           </div>
         </div>
