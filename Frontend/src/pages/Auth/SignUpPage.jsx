@@ -23,7 +23,7 @@ const SignupPage = () => {
     setError("");
     try {
       const res = await signup(formData);
-      updateUser(res.user); // save user + token
+      updateUser(res); // save user + token
       navigate("/farmer"); // ✅ Redirect
     } catch (err) {
       setError(err.response?.data?.message || "Signup failed. Try again.");
