@@ -1,11 +1,15 @@
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import HomePage from "./pages/HomePage";
 import FarmerDashboard from "./pages/FarmerDashboard";
+import AdvisorDashboard from "./pages/AdvisorDashboard";
+import SignupPage from "./pages/Auth/SignUpPage";
+import LoginPage from "./pages/Auth/LoginPage";
+import LearnMore from "./pages/LearnMore.jsx";
+
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import SignupPage from "./pages/Auth/SignUpPage";
-import AdvisorDashboard from "./pages/AdvisorDashboard";
-import LoginPage from "./pages/Auth/LoginPage";
 import PlantUploader from "./components/PlantUploader";
 
 function App() {
@@ -20,6 +24,8 @@ function App() {
             <Route path="/advisor" element={<AdvisorDashboard />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/learn-more" element={<LearnMore />} />
+            <Route path="/upload" element={<PlantUploader />} />
           </Routes>
         </main>
         <Footer />
