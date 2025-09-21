@@ -20,8 +20,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="glass-effect shadow-lg border-b border-white/20 sticky top-0 z-50">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 left-0 right-0 z-50 flex justify-center">
+      <div className=" w-[90%] mt-8 max-w-8xl px-6 sm:px-6 lg:px-8 glass-effect shadow-lg border-b border-white/20 sticky rounded-3xl">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex items-center -ml-5">
@@ -44,7 +44,7 @@ const Navbar = () => {
               to="/"
               className={`${isActive(
                 "/"
-              )} transition-all duration-200 font-medium`}>
+              )} transition-all duration-200 font-medium `}>
               Home
             </Link>
             <Link

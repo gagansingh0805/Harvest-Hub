@@ -1,9 +1,8 @@
 import React from "react";
 
 const LearnMore = () => {
-  
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-10">
       <div className="container mx-auto max-w-6xl px-6 py-16">
         {/* Learn More Section */}
         <div className="section-gradient rounded-3xl p-12">
@@ -17,9 +16,10 @@ const LearnMore = () => {
                 🚜 What is Kisan Saathi?
               </h3>
               <p className="mb-6">
-                Kisan Saathi is your AI-powered digital farming partner. It helps
-                farmers detect crop health, pests, and diseases early, provides
-                irrigation guidance, and offers localized weather updates.
+                Kisan Saathi is your AI-powered digital farming partner. It
+                helps farmers detect crop health, pests, and diseases early,
+                provides irrigation guidance, and offers localized weather
+                updates.
               </p>
 
               <h3 className="text-2xl font-semibold text-farm-dark-green mb-4">
@@ -48,8 +48,8 @@ const LearnMore = () => {
                 📈 Impact
               </h3>
               <p>
-                Already serving thousands of farmers across regions, helping them
-                save resources and improve productivity sustainably.
+                Already serving thousands of farmers across regions, helping
+                them save resources and improve productivity sustainably.
               </p>
             </div>
           </div>
@@ -57,5 +57,5 @@ const LearnMore = () => {
       </div>
     </div>
   );
-}
+};
 export default LearnMore;
