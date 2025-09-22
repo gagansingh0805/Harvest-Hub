@@ -12,6 +12,7 @@ import AdvisorDashboard from "./pages/AdvisorDashboard";
 import SignupPage from "./pages/Auth/SignUpPage";
 import LoginPage from "./pages/Auth/LoginPage";
 import LearnMore from "./pages/LearnMore.jsx";
+import DoctorAI from "./pages/DoctorAI.jsx"; // New
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -41,6 +42,7 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/learn-more" element={<LearnMore />} />
             <Route path="/upload" element={<PlantUploader />} />
+            <Route path="/doctor-ai" element={<DoctorAI />} /> {/* New */}
           </Routes>
         </main>
         <Footer />
