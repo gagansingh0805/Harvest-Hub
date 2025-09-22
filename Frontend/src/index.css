@@ -16,6 +16,15 @@
     /* border: 7px solid; required for border-image to show */
     /* border-image: linear-gradient(to bottom, rgba(22, 163, 74, 0.6), #0f172a) 1; */
   }
+  ::-webkit-scrollbar {
+    width: none;
+  }
+  html {
+    scrollbar-width: none; /* Firefox */
+  }
+  body {
+    -ms-overflow-style: none; /* IE and Edge */
+  }
 }
 
 @layer components {

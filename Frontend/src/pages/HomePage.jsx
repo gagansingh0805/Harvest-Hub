@@ -49,7 +49,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen overflow-x-hidden  bg-gray-100">
       {/* Hero Section */}
       {/* <div className="hero-gradient text-white relative overflow-hidden"> */}
       <div
@@ -58,9 +58,16 @@ const HomePage = () => {
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative w-full px-4 sm:px-6 lg:px-8 py-60">
           <div className="text-center max-w-6xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 drop-shadow-lg">
+            <h2 className="text-3xl md:text-7xl font-bold  text-header mb-4">
+              <span className="text-[#ffffff] drop-shadow-lg">Welcome to</span>{" "}
+              {/* <span className="bg-gradient-to-r from-[#F7971E] to-[#FFD200] bg-clip-text text-transparent drop-shadow-lg"> */}
+              <span className="bg-amber-500 bg-clip-text text-transparent drop-shadow-lg">
+                Kisan Setu
+              </span>
+            </h2>
+            {/* <h1 className="text-5xl md:text-7xl font-bold mb-8 drop-shadow-lg text-amber-400">
               Welcome to Kisan Saathi
-            </h1>
+            </h1> */}
             <p className="text-xl md:text-3xl mb-12 text-green-100 drop-shadow-md max-w-4xl mx-auto">
               Har Kisan ka Digital Saathi
             </p>
@@ -190,88 +197,93 @@ const HomePage = () => {
             </div>
           </div> */}
 
-          <div className="section-gradient rounded-3xl p-6 md:p-12 mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-12 text-center">
-              Why Choose Kisan Saathi?
-            </h2>
+          {/* <div className="section-gradient rounded-3xl p-6 md:p-12 mb-16"> */}
+          {/* <div className="bg-[#15ec60] rounded-3xl p-6 md:p-12 mb-16"> */}
+          <div className="bg-[#088124]  p-6 md:p-12 mb-16  w-screen relative left-1/2 -translate-x-1/2">
+            <div className="max-w-7xl items-center justify-center mx-auto">
+              <h2 className="text-3xl md:text-5xl font-bold text-amber-500 mb-12 text-center">
+                Why Choose Kisan Saathi?
+              </h2>
 
-            <div
-              className="grid gap-8 md:gap-12 
+              <div
+                className="grid gap-8 md:gap-12 
                grid-cols-1 
                md:grid-cols-2 
                lg:[grid-template-columns:2fr_1.2fr_1.2fr] 
                lg:[grid-template-rows:repeat(6,auto)]">
-              {/* Div1 → Big Image left */}
-              <div className="lg:col-span-1 lg:row-span-4 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full">
-                <div
-                  className="w-full h-full bg-cover bg-center transform transition-transform duration-700 hover:scale-110"
-                  style={{ backgroundImage: `url(${ai_analysis})` }}
-                />
-              </div>
+                {/* Div1 → Big Image left */}
+                <div className="lg:col-span-1 lg:row-span-4 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full">
+                  <div
+                    className="w-full h-full bg-cover bg-center transform transition-transform duration-700 hover:scale-110"
+                    style={{ backgroundImage: `url(${ai_analysis})` }}
+                  />
+                </div>
 
-              {/* Div2 → Content top right */}
-              <div className="lg:col-span-2 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto text-center md:text-left px-2 md:px-0">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 md:mb-3">
-                  AI-Powered Analysis
-                </h3>
-                <p className="text-gray-600 text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
-                  Advanced machine learning algorithms detect crop diseases and
-                  pests with high accuracy, giving you faster and more reliable
-                  insights.
-                </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-1 text-sm">
-                  <li>Instant detection using photos</li>
-                  <li>Trained on thousands of crop images</li>
-                  <li>Minimizes guesswork for farmers</li>
-                </ul>
-              </div>
+                {/* Div2 → Content top right */}
+                <div className="lg:col-span-2 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto text-center md:text-left px-2 md:px-0">
+                  <h3 className="text-xl md:text-3xl font-semibold text-white hover:text-yellow-400 mt-2 mb-2 md:mb-3">
+                    AI-Powered Analysis
+                  </h3>
+                  <p className="text-white text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
+                    Advanced machine learning algorithms detect crop diseases
+                    and pests with high accuracy, giving you faster and more
+                    reliable insights.
+                  </p>
+                  <ul className="list-disc list-inside text-white space-y-1 text-sm">
+                    <li>Instant detection using photos</li>
+                    <li>Trained on thousands of crop images</li>
+                    <li>Minimizes guesswork for farmers</li>
+                  </ul>
+                </div>
 
-              {/* Div3 → Big Image right */}
-              <div className="lg:col-span-2 lg:row-span-4 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full lg:mt-12">
-                <div
-                  className="w-full h-full bg-cover bg-center transform transition-transform duration-700 hover:scale-110"
-                  style={{ backgroundImage: `url(${easy_use})` }}
-                />
-              </div>
+                {/* Div3 → Big Image right */}
+                <div className="lg:col-span-2 lg:row-span-4 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full lg:mt-12">
+                  <div
+                    className="w-full h-full bg-cover bg-center transform transition-transform duration-700 hover:scale-110"
+                    style={{ backgroundImage: `url(${easy_use})` }}
+                  />
+                </div>
 
-              {/* Div4 → Content bottom left */}
-              <div className="lg:col-span-1 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto text-center md:text-left px-2 md:px-0">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 md:mb-3">
-                  Easy to Use
-                </h3>
-                <p className="text-gray-600 text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
-                  Our platform is designed for simplicity. Upload a photo and
-                  get results instantly—no technical expertise required.
-                </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-1 text-sm">
-                  <li>One-click photo upload</li>
-                  <li>Instant diagnosis results</li>
-                  <li>Works smoothly on mobile devices</li>
-                </ul>
-              </div>
+                {/* Div4 → Content bottom left */}
+                <div className="lg:col-span-1 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto text-center md:text-left px-2 md:px-0">
+                  <h3 className="text-xl md:text-3xl font-semibold  text-white hover:text-yellow-400 mb-2 md:mb-3">
+                    Easy to Use
+                  </h3>
+                  <p className="text-white text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
+                    Our platform is designed for simplicity. Upload a photo and
+                    get results instantly—no technical expertise required.
+                  </p>
+                  <ul className="list-disc list-inside text-white space-y-1 text-sm">
+                    <li>One-click photo upload</li>
+                    <li>Instant diagnosis results</li>
+                    <li>Works smoothly on mobile devices</li>
+                  </ul>
+                </div>
 
-              {/* Div5 → Big Image left */}
-              <div className="lg:col-span-1 lg:row-span-3 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full">
-                <div
-                  className="w-full h-full bg-cover bg-center transform transition-transform duration-700 hover:scale-110"
-                  style={{ backgroundImage: `url(${sustainable})` }}
-                />
-              </div>
+                {/* Div5 → Big Image left */}
+                <div className="lg:col-span-1 lg:row-span-3 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full">
+                  <div
+                    className="w-full h-full bg-cover bg-center transform transition-transform duration-700 hover:scale-110"
+                    style={{ backgroundImage: `url(${sustainable})` }}
+                  />
+                </div>
 
-              {/* Div6 → Content right */}
-              <div className="lg:col-span-2 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto mt-8 text-center md:text-left px-2 md:px-0">
-                <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-2 md:mb-3">
-                  Sustainable Solutions
-                </h3>
-                <p className="text-gray-600 text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
-                  Eco-friendly recommendations that not only protect your crops
-                  but also keep the soil and environment healthy for the future.
-                </p>
-                <ul className="list-disc list-inside text-gray-600 space-y-1 text-sm">
-                  <li>Reduces chemical usage</li>
-                  <li>Promotes organic practices</li>
-                  <li>Improves soil fertility long-term</li>
-                </ul>
+                {/* Div6 → Content right */}
+                <div className="lg:col-span-2 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto mt-8 text-center md:text-left px-2 md:px-0">
+                  <h3 className="text-xl md:text-3xl font-semibold  text-white hover:text-yellow-400 mb-2 md:mb-3">
+                    Sustainable Solutions
+                  </h3>
+                  <p className="text-white text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
+                    Eco-friendly recommendations that not only protect your
+                    crops but also keep the soil and environment healthy for the
+                    future.
+                  </p>
+                  <ul className="list-disc list-inside text-white space-y-1 text-sm">
+                    <li>Reduces chemical usage</li>
+                    <li>Promotes organic practices</li>
+                    <li>Improves soil fertility long-term</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
