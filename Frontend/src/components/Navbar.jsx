@@ -54,6 +54,9 @@ const Navbar = () => {
               )} transition-all duration-200 font-medium`}>
               Farmer Dashboard
             </Link>
+            <Link to="/doctor-ai" className="hover:text-green-500">
+            Doctor AI
+           </Link>
             <Link
               to="/advisor"
               className={`${isActive(
