@@ -17,6 +17,7 @@ import DoctorAI from "./pages/DoctorAI.jsx"; // New
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PlantUploader from "./components/PlantUploader";
+import WeatherCard from "./components/WeatherCard.jsx";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -42,7 +43,8 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/learn-more" element={<LearnMore />} />
             <Route path="/upload" element={<PlantUploader />} />
-            <Route path="/doctor-ai" element={<DoctorAI />} /> {/* New */}
+            <Route path="/doctor-ai" element={<DoctorAI />} />
+            <Route path="/weather" element={<WeatherCard />} />
           </Routes>
         </main>
         <Footer />
