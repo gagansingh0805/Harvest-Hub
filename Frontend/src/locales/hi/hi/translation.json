@@ -1,0 +1,30 @@
+{
+  "welcomeTo": "स्वागत है",
+  "brandName": "किसान सेतु",
+  "tagline": "हर किसान का डिजिटल साथी",
+  "getStarted": "शुरू करें",
+  "learnMore": "और जानें",
+  "farmOverview": "खेती का सारांश",
+  "whyChoose": "क्यों चुनें",
+  "platformStats": "प्लेटफ़ॉर्म आँकड़े",
+  "farmersServed": "किसानों की सेवा",
+  "photosAnalyzed": "फोटो का विश्लेषण",
+  "accuracyRate": "सटीकता दर",
+  "supportAvailable": "सहायता उपलब्ध",
+
+  "farmStatus": {
+    "title": "खेती की स्थिति",
+    "value": "स्वस्थ",
+    "description": "सभी फसलें अच्छी तरह बढ़ रही हैं"
+  },
+  "pestAlerts": {
+    "title": "कीट चेतावनी",
+    "value": "2 सक्रिय",
+    "description": "धान की फसल में ब्राउन स्पॉट पाया गया"
+  },
+  "weatherSnapshot": {
+    "title": "मौसम सारांश",
+    "value": "28°C",
+    "description": "धूप और 60% आर्द्रता"
+  }
+}

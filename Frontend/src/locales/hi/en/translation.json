@@ -1,0 +1,30 @@
+{
+  "welcomeTo": "Welcome to",
+  "brandName": "Kisan Setu",
+  "tagline": "Your Digital Farming Companion",
+  "getStarted": "Get Started",
+  "learnMore": "Learn More",
+  "farmOverview": "Farm Overview",
+  "whyChoose": "Why Choose",
+  "platformStats": "Platform Statistics",
+  "farmersServed": "Farmers Served",
+  "photosAnalyzed": "Photos Analyzed",
+  "accuracyRate": "Accuracy Rate",
+  "supportAvailable": "Support Available",
+
+  "farmStatus": {
+    "title": "Farm Status",
+    "value": "Healthy",
+    "description": "All crops are growing well"
+  },
+  "pestAlerts": {
+    "title": "Pest Alerts",
+    "value": "2 Active",
+    "description": "Brown spot detected in rice field"
+  },
+  "weatherSnapshot": {
+    "title": "Weather Snapshot",
+    "value": "28°C",
+    "description": "Sunny with 60% humidity"
+  }
+}
