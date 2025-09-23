@@ -1,76 +1,73 @@
 import React, { useState } from "react";
+import DoctorImage from "../assets/doctor.png";
 
 const DoctorAI = () => {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "👩‍🌾 Namaste! I am your Kisan Doctor AI. You can ask me about seeds, crops, or farming advice.",
+      text: "Ask Your Question Here",
     },
   ]);
   const [input, setInput] = useState("");
 
   const handleSend = () => {
-    if (!input.trim()) return;
-
-    // Add farmer message
-    const newMessages = [...messages, { sender: "farmer", text: input }];
-    setMessages(newMessages);
-
-    // Placeholder AI response (later we integrate with API)
+    if (input.trim() === "") return;
+    setMessages([...messages, { sender: "user", text: input }]);
+    setInput("");
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "🌱 Thanks for your question! I’ll suggest suitable seeds soon." },
+        { sender: "bot", text: "Ye message AI se aaya: " + input },
       ]);
     }, 1000);
-
-    setInput("");
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 pt-36">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Doctor AI</h1>
-          <p className="text-gray-600">
-            Get personalized crop & seed advice by chatting with our AI doctor.
-          </p>
-        </div>
+    <div className="pt-20 px-5 text-center">
+      {/* Doctor Image */}
+      <img
+        src={DoctorImage}
+        alt="Doctor AI"
+        className="w-56 mx-auto rounded-full mb-7" // slightly bigger
+      />
 
-        {/* Chat Box */}
-        <div className="card flex flex-col h-[70vh]">
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50 rounded-lg">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`p-3 rounded-lg max-w-xs ${
-                  msg.sender === "farmer"
-                    ? "ml-auto bg-green-200 text-gray-800"
-                    : "mr-auto bg-white border text-gray-800"
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
-          </div>
+      {/* Green Text Box */}
+      <div className="max-w-xl mx-auto bg-green-500 text-white font-bold text-lg p-5 rounded-lg shadow-md mb-10">
+        👩‍🌾 Namaste! I am your Kisan Doctor AI. You can ask me about seeds, crops, or farming advice.
+      </div>
 
-          {/* Input Bar */}
-          <div className="flex items-center border-t p-3">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about seeds, pests, or crop advice..."
-              className="flex-1 border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            <button
-              onClick={handleSend}
-              className="ml-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+      {/* Chatbot Section */}
+      <div className="max-w-xl mx-auto bg-gray-100 p-5 rounded-lg border border-gray-300">
+        {messages.map((msg, index) => (
+          <div
+            key={index}
+            className={`mb-3 text-left ${msg.sender === "user" ? "text-right" : "text-left"}`}
+          >
+            <span
+              className={`inline-block p-3 rounded-lg ${
+                msg.sender === "bot" ? "bg-white" : "bg-green-100"
+              }`}
             >
-              Send
-            </button>
+              {msg.text}
+            </span>
           </div>
+        ))}
+
+        <div className="mt-5 flex gap-3">
+          <input
+            type="text"
+            placeholder="Ask about seeds, pests, or crop advice..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-400"
+          />
+          <button
+            onClick={handleSend}
+            className="px-5 py-3 rounded-md bg-green-500 text-white font-bold hover:bg-green-600"
+          >
+            Send
+          </button>
         </div>
       </div>
     </div>
