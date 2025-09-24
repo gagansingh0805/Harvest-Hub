@@ -1,7 +1,7 @@
 import WeatherCard from "../components/WeatherCard";
 import PlantUploader from "../components/PlantUploader";
 import { Link } from "react-router-dom";
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import { UserContext } from "../context/UserProvider";
 import background from "../assets/background1.jpg";
 import sustainable from "../assets/sustainable.jpg";
@@ -10,12 +10,9 @@ import farmerImg from "../assets/farmerImg.jpg";
 import fieldImg from "../assets/fieldImg.jpg";
 import supportImg from "../assets/supportImg.jpg";
 import aiImg from "../assets/aiImg.jpg";
-
 import easy_use from "../assets/easy-use.jpg";
 import { Users, Camera, Target, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
-
-// Testing Git push - Ayush
 
 const HomePage = () => {
   const { user } = useContext(UserContext);
@@ -40,7 +37,7 @@ const HomePage = () => {
       title: "Weather Snapshot",
       value: "28°C",
       status: "info",
-      icon: "☀️",
+      icon: "☀",
       description: "Sunny with 60% humidity",
     },
   };
@@ -91,26 +88,22 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen overflow-x-hidden  bg-gray-100">
+    <div className="min-h-screen overflow-x-hidden bg-gray-100">
       {/* Hero Section */}
-      {/* <div className="hero-gradient text-white relative overflow-hidden"> */}
       <div
-        className=" text-white relative overflow-hidden bg-cover bg-center min-h-screen"
+        className="text-white relative overflow-hidden bg-cover bg-center min-h-screen"
         loading="lazy"
-        style={{ backgroundImage: `url(${background})` }}>
+        style={{ backgroundImage: `url(${background})` }}
+      >
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative w-full px-4 sm:px-6 lg:px-8 py-60">
           <div className="text-center max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-7xl font-bold  text-header mb-4">
+            <h2 className="text-3xl md:text-7xl font-bold text-header mb-4">
               <span className="text-[#ffffff] drop-shadow-lg">Welcome to</span>{" "}
-              {/* <span className="bg-gradient-to-r from-[#F7971E] to-[#FFD200] bg-clip-text text-transparent drop-shadow-lg"> */}
               <span className="bg-amber-500 bg-clip-text text-transparent drop-shadow-lg">
                 Kisan Setu
               </span>
             </h2>
-            {/* <h1 className="text-5xl md:text-7xl font-bold mb-8 drop-shadow-lg text-amber-400">
-              Welcome to Kisan Saathi
-            </h1> */}
             <p className="text-xl md:text-3xl mb-12 text-green-100 drop-shadow-md max-w-4xl mx-auto">
               Har Kisan ka Digital Saathi
             </p>
@@ -118,20 +111,22 @@ const HomePage = () => {
               {user ? (
                 <Link
                   to="/farmer"
-                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
+                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
+                >
                   Get Started
                 </Link>
               ) : (
                 <Link
                   to="/login"
-                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
+                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
+                >
                   Get Started
                 </Link>
               )}
-
               <Link
                 to="/learn-more"
-                className="border-2 border-white text-white font-bold py-4 px-10 rounded-xl hover:bg-white hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
+                className="border-2 border-white text-white font-bold py-4 px-10 rounded-xl hover:bg-white hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
+              >
                 Learn More
               </Link>
             </div>
@@ -140,7 +135,7 @@ const HomePage = () => {
       </div>
 
       {/* Overview Cards Section */}
-      <div className="w-full  py-16">
+      <div className="w-full py-16">
         <div className="">
           <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
             Farm Overview
@@ -150,13 +145,15 @@ const HomePage = () => {
               {Object.entries(overviewData).map(([key, data]) => (
                 <div
                   key={key}
-                  className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                  className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+                >
                   <div className="flex items-center justify-between mb-6">
                     <div className="text-4xl">{data.icon}</div>
                     <span
                       className={`px-3 py-2 rounded-full text-sm font-medium border ${getStatusColor(
                         data.status
-                      )}`}>
+                      )}`}
+                    >
                       {data.value}
                     </span>
                   </div>
@@ -168,13 +165,13 @@ const HomePage = () => {
               ))}
             </div>
           </div>
+
           {/* Main card area */}
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 px-4 sm:px-6 lg:px-8">
               {/* Left Column → Weather + Recommendations */}
               <div className="grid gap-6">
                 <WeatherCard />
-
                 <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                   <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                     🌱 Recommended Crops
@@ -202,9 +199,8 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* <div className="section-gradient rounded-3xl p-6 md:p-12 mb-16"> */}
-          {/* <div className="bg-[#15ec60] rounded-3xl p-6 md:p-12 mb-16"> */}
-          <div className="bg-[#088124]  p-6 md:p-12 w-screen">
+          {/* Why Choose Section */}
+          <div className="bg-[#088124] p-6 md:p-12 w-screen">
             <div className="max-w-7xl items-center justify-center mx-auto">
               <h2 className="text-3xl md:text-5xl font-bold text-amber-500 mb-12 text-center">
                 Why Choose Kisan Saathi?
@@ -215,7 +211,8 @@ const HomePage = () => {
                grid-cols-1 
                md:grid-cols-2 
                lg:[grid-template-columns:2fr_1.2fr_1.2fr] 
-               lg:[grid-template-rows:repeat(6,auto)]">
+               lg:[grid-template-rows:repeat(6,auto)]"
+              >
                 {/* Div1 → Big Image left */}
                 <div className="lg:col-span-1 lg:row-span-4 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full">
                   <div
@@ -253,7 +250,7 @@ const HomePage = () => {
 
                 {/* Div4 → Content bottom left */}
                 <div className="lg:col-span-1 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto text-center md:text-left px-2 md:px-0">
-                  <h3 className="text-xl md:text-3xl font-semibold  text-white hover:text-yellow-400 mb-2 md:mb-3">
+                  <h3 className="text-xl md:text-3xl font-semibold text-white hover:text-yellow-400 mb-2 md:mb-3">
                     Easy to Use
                   </h3>
                   <p className="text-white text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
@@ -278,7 +275,7 @@ const HomePage = () => {
 
                 {/* Div6 → Content right */}
                 <div className="lg:col-span-2 lg:row-span-2 flex flex-col justify-center max-w-lg mx-auto mt-8 text-center md:text-left px-2 md:px-0">
-                  <h3 className="text-xl md:text-3xl font-semibold  text-white hover:text-yellow-400 mb-2 md:mb-3">
+                  <h3 className="text-xl md:text-3xl font-semibold text-white hover:text-yellow-400 mb-2 md:mb-3">
                     Sustainable Solutions
                   </h3>
                   <p className="text-white text-sm md:text-base mb-2 md:mb-3 leading-relaxed">
@@ -296,48 +293,13 @@ const HomePage = () => {
             </div>
           </div>
 
-          {/* Quick Stats */}
-          {/* <div className="card mb-16">
-            <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">
-              Platform Statistics
-            </h2>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-farm-green mb-3">
-                  10,000+
-                </div>
-                <div className="text-gray-600 text-lg">Farmers Served</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-farm-green mb-3">
-                  50,000+
-                </div>
-                <div className="text-gray-600 text-lg">Photos Analyzed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-farm-green mb-3">
-                  95%
-                </div>
-                <div className="text-gray-600 text-lg">Accuracy Rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-farm-green mb-3">
-                  24/7
-                </div>
-                <div className="text-gray-600 text-lg">Support Available</div>
-              </div>
-            </div>
-          </div> */}
-
-          <section className="relative pt-20 bg-gradient-to-b from-emerald-50 to-gray-100 ">
+          {/* Farmers First Section */}
+          <section className="relative pt-20 bg-gradient-to-b from-emerald-50 to-gray-100">
             <div className="max-w-7xl mx-auto px-6 text-center">
-              {/* Heading */}
               <h2 className="text-3xl md:text-5xl font-bold mb-16 text-emerald-700">
                 🌱 Farmers First, Always
               </h2>
 
-              {/* Stats Grid with Images */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 {stats.map((stat, i) => {
                   const Icon = stat.icon;
@@ -347,16 +309,14 @@ const HomePage = () => {
                       whileInView={{ opacity: [0, 1], y: [30, 0] }}
                       transition={{ duration: 0.6, delay: i * 0.2 }}
                       viewport={{ once: true, amount: 0.2 }}
-                      className="relative rounded-2xl overflow-hidden group shadow-lg">
-                      {/* Background Image */}
+                      className="relative rounded-2xl overflow-hidden group shadow-lg"
+                    >
                       <img
                         src={stat.img}
                         alt={stat.title}
                         loading="lazy"
                         className="h-72 w-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-
-                      {/* Overlay */}
                       <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white p-6">
                         <Icon className="w-12 h-12 mb-3 text-emerald-300" />
                         <div className="text-4xl font-extrabold">
@@ -372,17 +332,15 @@ const HomePage = () => {
                 })}
               </div>
 
-              {/* Farmer Referrals / Faces */}
               <motion.div
                 whileInView={{ opacity: [0, 1], y: [20, 0] }}
                 transition={{ duration: 0.6, delay: 0.5 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="mt-16">
+                className="mt-16"
+              >
                 <p className="text-gray-700 text-lg font-medium mb-6 text-center">
                   Loved by thousands of farmers nationwide 🌾
                 </p>
-
-                {/* Farmer Faces */}
                 <div className="flex justify-center -space-x-4 mb-6">
                   <img
                     src="https://randomuser.me/api/portraits/men/32.jpg"
@@ -403,8 +361,6 @@ const HomePage = () => {
                     +99
                   </div>
                 </div>
-
-                {/* Farmer Testimonials */}
                 <div className="grid md:grid-cols-3 gap-6 text-center">
                   <div className="bg-white p-4 rounded-xl shadow hover:shadow-xl transition-all duration-300">
                     <p className="text-gray-700 italic mb-2">
@@ -420,9 +376,7 @@ const HomePage = () => {
                       "The AI analysis is amazing! Makes farming decisions so
                       much easier."
                     </p>
-                    <p className="font-semibold text-green-600">
-                      – Sita, Punjab
-                    </p>
+                    <p className="font-semibold text-green-600">– Sita, Punjab</p>
                   </div>
                   <div className="bg-white p-4 rounded-xl shadow hover:shadow-xl transition-all duration-300">
                     <p className="text-gray-700 italic mb-2">
