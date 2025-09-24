@@ -5,6 +5,7 @@ import { Bell, AlertTriangle, CloudSunRain, Wind, Droplets, Sprout, Wallet, Plus
 import fieldImg from "../assets/fieldImg.jpg";
 import AlertCard from "../components/AlertCard";
 import { UserContext } from "../context/UserProvider";
+import { getUserCrops, addCrop, updateCrop, deleteCrop } from "../api/cropApi";
 
 const FarmerDashboard = () => {
   const { user } = useContext(UserContext);
@@ -20,49 +21,24 @@ const FarmerDashboard = () => {
   });
   const [newExpense, setNewExpense] = useState({ item: "", category: "", cost: "" });
   const [showAddCrop, setShowAddCrop] = useState(false);
-  const [newCrop, setNewCrop] = useState({ name: "", variety: "", area: "", growthStage: "Planted", health: "Good", location: "", plantedDate: "", expectedHarvest: "", harvestPurpose: "", progress: 0 });
+  const [newCrop, setNewCrop] = useState({ 
+    name: "", 
+    variety: "", 
+    area: "", 
+    currentStage: "Seeded", 
+    health: "Good", 
+    location: "", 
+    plantedDate: new Date().toISOString().split('T')[0], 
+    expectedHarvest: "", 
+    harvestPurpose: "", 
+    progress: 0 
+  });
   const [predictionForm, setPredictionForm] = useState({ landAcres: "", cropType: "Wheat", harvestDate: "" });
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [showPrediction, setShowPrediction] = useState(false);
-  // Mock data for current crops - now stateful
-  const [currentCrops, setCurrentCrops] = useState([
-    {
-      id: 1,
-      name: "Wheat",
-      variety: "HD 2967",
-      area: "2.5 acres",
-      growthStage: "Flowering",
-      health: "Good",
-      location: "Ludhiana, Punjab",
-      plantedDate: "2024-01-15",
-      expectedHarvest: "2024-04-15",
-      progress: 75,
-    },
-    {
-      id: 2,
-      name: "Rice",
-      variety: "Pusa Basmati",
-      area: "1.8 acres",
-      growthStage: "Vegetative",
-      health: "Warning",
-      location: "Varanasi, UP",
-      plantedDate: "2024-02-01",
-      expectedHarvest: "2024-06-01",
-      progress: 45,
-    },
-    {
-      id: 3,
-      name: "Maize",
-      variety: "Hybrid 123",
-      area: "3.2 acres",
-      growthStage: "Tasseling",
-      health: "Good",
-      location: "Nashik, MH",
-      plantedDate: "2024-01-20",
-      expectedHarvest: "2024-05-20",
-      progress: 85,
-    },
-  ]);
+  const [currentCrops, setCurrentCrops] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Mock reminders
   const reminders = [
@@ -75,6 +51,26 @@ const FarmerDashboard = () => {
     { id: 1, type: "Irrigation", title: "Irrigate in next 2 days", description: "Soil moisture is low in Field A.", priority: "High", dueDate: "2024-03-12" },
     { id: 2, type: "Fertilization", title: "Apply NPK fertilizer", description: "Wheat crop needs nitrogen boost.", priority: "Medium", dueDate: "2024-03-18" },
   ];
+
+  // Fetch user crops from backend
+  useEffect(() => {
+    const fetchCrops = async () => {
+      try {
+        setIsLoading(true);
+        const crops = await getUserCrops();
+        console.log("Fetched crops:", crops);
+        setCurrentCrops(crops);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching crops:", err);
+        setError("Failed to load your crops. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchCrops();
+  }, [user?.id]);
 
   // Framer animation variants
   const containerVariants = {
@@ -161,18 +157,43 @@ const FarmerDashboard = () => {
   };
 
   // Add new crop handler
-  const handleAddCrop = (e) => {
+  const handleAddCrop = async (e) => {
     e.preventDefault();
     if (!newCrop.name || !newCrop.area) return;
-    const crop = {
-      id: Date.now(),
-      ...newCrop,
-      plantedDate: newCrop.plantedDate || new Date().toISOString().split('T')[0],
-      expectedHarvest: newCrop.expectedHarvest || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    };
-    setCurrentCrops(prev => [...prev, crop]);
-    setNewCrop({ name: "", variety: "", area: "", growthStage: "Planted", health: "Good", location: "", plantedDate: "", expectedHarvest: "", harvestPurpose: "", progress: 0 });
-    setShowAddCrop(false);
+    
+    try {
+      // Ensure dates are set
+      const cropToAdd = {
+        ...newCrop,
+        plantedDate: newCrop.plantedDate || new Date().toISOString().split('T')[0],
+        expectedHarvest: newCrop.expectedHarvest || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      };
+      
+      console.log("Submitting crop:", cropToAdd);
+      const addedCrop = await addCrop(cropToAdd);
+      console.log("Response from server:", addedCrop);
+      
+      // Add new crop to state
+      setCurrentCrops(prev => [addedCrop, ...prev]);
+      
+      // Reset form
+      setNewCrop({ 
+        name: "", 
+        variety: "", 
+        area: "", 
+        currentStage: "Seeded", 
+        health: "Good", 
+        location: "", 
+        plantedDate: new Date().toISOString().split('T')[0], 
+        expectedHarvest: "", 
+        harvestPurpose: "", 
+        progress: 0 
+      });
+      setShowAddCrop(false);
+    } catch (err) {
+      console.error("Error adding crop:", err);
+      alert("Failed to add crop. Please try again.");
+    }
   };
 
   // Price prediction (mock)
@@ -308,7 +329,7 @@ const FarmerDashboard = () => {
                 whileHover={{ scale: 1.05 }} 
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowAddCrop(!showAddCrop)}
-                className="btn-primary flex items-center gap-2"
+                className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Add Crop
@@ -338,33 +359,46 @@ const FarmerDashboard = () => {
                     placeholder="Variety (e.g., HD 2967)" 
                     className="input" 
                   />
-                  <input 
-                    value={newCrop.area} 
-                    onChange={(e) => setNewCrop({...newCrop, area: e.target.value})} 
-                    placeholder="Area (e.g., 2.5 acres)" 
-                    className="input" 
-                    required 
-                  />
+                  <div className="relative">
+                    <input 
+                      value={newCrop.area} 
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        // Remove non-numeric characters except dots
+                        value = value.replace(/[^\d.]/g, '');
+                        setNewCrop({...newCrop, area: value});
+                      }} 
+                      placeholder="Area (e.g., 2.5)" 
+                      className="input pr-16" 
+                      type="number"
+                      step="0.1"
+                      min="0.1"
+                      required 
+                    />
+                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">acres</span>
+                  </div>
                   <select 
-                    value={newCrop.growthStage} 
-                    onChange={(e) => setNewCrop({...newCrop, growthStage: e.target.value})} 
+                    value={newCrop.currentStage} 
+                    onChange={(e) => setNewCrop({...newCrop, currentStage: e.target.value})} 
                     className="input"
                   >
-                    <option>Planted</option>
-                    <option>Germination</option>
-                    <option>Vegetative</option>
-                    <option>Flowering</option>
-                    <option>Tasseling</option>
-                    <option>Maturity</option>
+                    <option value="Seeded">Seeded</option>
+                    <option value="Germination">Germination</option>
+                    <option value="Vegetative">Vegetative</option>
+                    <option value="Flowering">Flowering</option>
+                    <option value="Tasseling">Tasseling</option>
+                    <option value="Grain Development">Grain Development</option>
+                    <option value="Maturity">Maturity</option>
+                    <option value="Harvested">Harvested</option>
                   </select>
                   <select 
                     value={newCrop.health} 
                     onChange={(e) => setNewCrop({...newCrop, health: e.target.value})} 
                     className="input"
                   >
-                    <option>Good</option>
-                    <option>Warning</option>
-                    <option>Poor</option>
+                    <option value="Good">Good</option>
+                    <option value="Warning">Warning</option>
+                    <option value="Poor">Poor</option>
                   </select>
                   <input 
                     value={newCrop.location} 
@@ -379,7 +413,9 @@ const FarmerDashboard = () => {
                       value={newCrop.plantedDate} 
                       onChange={(e) => setNewCrop({...newCrop, plantedDate: e.target.value})} 
                       className="input" 
+                      required
                     />
+                    <p className="text-xs text-gray-500">When did you plant this crop?</p>
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-emerald-600 font-medium">Expected Harvest Date</label>
@@ -389,6 +425,7 @@ const FarmerDashboard = () => {
                       onChange={(e) => setNewCrop({...newCrop, expectedHarvest: e.target.value})} 
                       className="input" 
                     />
+                    <p className="text-xs text-gray-500">Leave blank for auto-calculation</p>
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-emerald-600 font-medium">Harvest Purpose</label>
@@ -418,54 +455,110 @@ const FarmerDashboard = () => {
                     />
                   </div>
                   <div className="flex gap-2 col-span-full">
-                    <button type="submit" className="btn-primary flex-1">Add Crop</button>
-                    <button type="button" onClick={() => setShowAddCrop(false)} className="btn-secondary flex-1">Cancel</button>
+                    <button 
+                      type="submit" 
+                      className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed flex-1 flex items-center justify-center gap-2"
+                      disabled={!newCrop.name || !newCrop.area || !newCrop.plantedDate}
+                    >
+                      <Plus className="w-4 h-4" />
+                      Add Crop
+                    </button>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowAddCrop(false)} 
+                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 focus:outline-none flex-1"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                  <div className="col-span-full text-xs text-gray-500 mt-2">
+                    <p>* Required fields: Crop Name, Area, and Planted Date</p>
                   </div>
                 </form>
               </motion.div>
             )}
             
-            <div className="space-y-4">
-              {currentCrops.map((crop) => (
-                <motion.div key={crop.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center space-x-3">
-                      <Sprout className="w-6 h-6 text-emerald-600" />
-                      <div>
-                        <h3 className="font-semibold text-gray-800">{crop.name}</h3>
-                        <p className="text-sm text-gray-600">{crop.variety}</p>
+            {/* Crop delete handler */}
+            {isLoading ? (
+              <div className="flex justify-center items-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-600"></div>
+              </div>
+            ) : error ? (
+              <div className="py-10 text-center">
+                <p className="text-red-600">{error}</p>
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
+                >
+                  Retry
+                </button>
+              </div>
+            ) : currentCrops.length === 0 ? (
+              <div className="py-10 text-center">
+                <p className="text-gray-500">You don't have any crops yet. Click the "Add Crop" button to get started!</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {currentCrops.map((crop) => (
+                  <motion.div key={crop.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-3">
+                        <Sprout className="w-6 h-6 text-emerald-600" />
+                        <div>
+                          <h3 className="font-semibold text-gray-800">{crop.name}</h3>
+                          <p className="text-sm text-gray-600">{crop.variety}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getHealthColor(crop.health)}`}>{crop.health}</span>
+                        <button
+                          onClick={async () => {
+                            if (window.confirm(`Are you sure you want to delete ${crop.name}?`)) {
+                              try {
+                                await deleteCrop(crop.id);
+                                setCurrentCrops(prevCrops => prevCrops.filter(c => c.id !== crop.id));
+                              } catch (err) {
+                                console.error("Error deleting crop:", err);
+                                alert("Failed to delete crop");
+                              }
+                            }
+                          }}
+                          className="p-1 text-gray-400 hover:text-red-600 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getHealthColor(crop.health)}`}>{crop.health}</span>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm text-center">
-                    <div><span className="text-gray-600">Area:</span><div className="font-medium">{crop.area}</div></div>
-                    <div><span className="text-gray-600">Stage:</span><div className="font-medium">{crop.growthStage}</div></div>
-                    <div><span className="text-gray-600">Planted:</span><div className="font-medium">{new Date(crop.plantedDate).toLocaleDateString()}</div></div>
-                    <div><span className="text-gray-600">Harvest:</span><div className="font-medium">{new Date(crop.expectedHarvest).toLocaleDateString()}</div></div>
-                    <div className="flex items-center justify-center"><MapPin className="w-4 h-4 mr-1 text-gray-500" /><span className="font-medium">{crop.location || "Your Farm"}</span></div>
-                  </div>
-                  <div className="mt-3">
-                    <div className="flex justify-between text-sm text-gray-600 mb-1"><span>Growth Progress</span><span>{crop.progress}%</span></div>
-                    <div className="w-full bg-gray-200 rounded-full h-2"><div className="bg-farm-green h-2 rounded-full transition-all duration-300" style={{ width: `${crop.progress}%` }}></div></div>
-                  </div>
-                  {/* 5-day Weather for this crop/location */}
-                  <div className="mt-4">
-                    <div className="flex items-center gap-2 text-sm text-gray-700 mb-2"><CloudSunRain className="w-4 h-4 text-blue-600" /> Weather (next 5 days)</div>
-                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
-                      {getFiveDayForecast(crop.id).map((d, i) => (
-                        <div key={i} className="p-2 bg-blue-50 rounded text-center">
-                          <div className="text-xs font-medium">{d.day}</div>
-                          <div className="text-sm font-semibold text-blue-700">{d.temp}</div>
-                          <div className="text-[11px] text-gray-600 flex items-center justify-center gap-1"><Droplets className="w-3 h-3" />{d.rain}</div>
-                          <div className="text-[11px] text-gray-600 flex items-center justify-center gap-1"><Wind className="w-3 h-3" />{d.wind}</div>
-                        </div>
-                      ))}
+                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm text-center">
+                      <div><span className="text-gray-600">Area:</span><div className="font-medium">{crop.area}</div></div>
+                      <div><span className="text-gray-600">Stage:</span><div className="font-medium">{crop.growthStage || crop.currentStage}</div></div>
+                      <div><span className="text-gray-600">Planted:</span><div className="font-medium">{new Date(crop.plantedDate).toLocaleDateString()}</div></div>
+                      <div><span className="text-gray-600">Harvest:</span><div className="font-medium">{new Date(crop.expectedHarvest).toLocaleDateString()}</div></div>
+                      <div className="flex items-center justify-center"><MapPin className="w-4 h-4 mr-1 text-gray-500" /><span className="font-medium">{crop.location || "Your Farm"}</span></div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                    <div className="mt-3">
+                      <div className="flex justify-between text-sm text-gray-600 mb-1"><span>Growth Progress</span><span>{crop.progress}%</span></div>
+                      <div className="w-full bg-gray-200 rounded-full h-2"><div className="bg-emerald-500 h-2 rounded-full transition-all duration-300" style={{ width: `${crop.progress}%` }}></div></div>
+                    </div>
+                    {/* 5-day Weather for this crop/location */}
+                    <div className="mt-4">
+                      <div className="flex items-center gap-2 text-sm text-gray-700 mb-2"><CloudSunRain className="w-4 h-4 text-blue-600" /> Weather (next 5 days)</div>
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                        {(crop.weather || getFiveDayForecast(crop.id.toString())).map((d, i) => (
+                          <div key={i} className="p-2 bg-blue-50 rounded text-center">
+                            <div className="text-xs font-medium">{d.day}</div>
+                            <div className="text-sm font-semibold text-blue-700">{d.temp}</div>
+                            <div className="text-[11px] text-gray-600 flex items-center justify-center gap-1"><Droplets className="w-3 h-3" />{d.rain}</div>
+                            <div className="text-[11px] text-gray-600 flex items-center justify-center gap-1"><Wind className="w-3 h-3" />{d.wind}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          
           </div>
 
           {/* Alerts & Notifications */}
