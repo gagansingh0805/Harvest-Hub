@@ -9,6 +9,7 @@ import {
 import HomePage from "./pages/HomePage";
 import FarmerDashboard from "./pages/FarmerDashboard";
 import AdvisorDashboard from "./pages/AdvisorDashboard";
+import MarketAnalytics from "./pages/MarketAnalytics.jsx";
 import SignupPage from "./pages/Auth/SignUpPage";
 import LoginPage from "./pages/Auth/LoginPage";
 import LearnMore from "./pages/LearnMore.jsx";
@@ -39,6 +40,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/farmer" element={<FarmerDashboard />} />
             <Route path="/advisor" element={<AdvisorDashboard />} />
+            <Route path="/market" element={<MarketAnalytics />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/learn-more" element={<LearnMore />} />
