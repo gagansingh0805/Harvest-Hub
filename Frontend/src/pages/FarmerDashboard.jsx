@@ -16,6 +16,7 @@ import {
 import fieldImg from "../assets/fieldImg.jpg";
 import AlertCard from "../components/AlertCard";
 import { UserContext } from "../context/UserProvider";
+import { getUserCrops, addCrop, updateCrop, deleteCrop } from "../api/cropApi";
 
 const FarmerDashboard = () => {
   const { user } = useContext(UserContext);
@@ -58,45 +59,9 @@ const FarmerDashboard = () => {
   });
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [showPrediction, setShowPrediction] = useState(false);
-  // Mock data for current crops - now stateful
-  const [currentCrops, setCurrentCrops] = useState([
-    {
-      id: 1,
-      name: "Wheat",
-      variety: "HD 2967",
-      area: "2.5 acres",
-      growthStage: "Flowering",
-      health: "Good",
-      location: "Ludhiana, Punjab",
-      plantedDate: "2024-01-15",
-      expectedHarvest: "2024-04-15",
-      progress: 75,
-    },
-    {
-      id: 2,
-      name: "Rice",
-      variety: "Pusa Basmati",
-      area: "1.8 acres",
-      growthStage: "Vegetative",
-      health: "Warning",
-      location: "Varanasi, UP",
-      plantedDate: "2024-02-01",
-      expectedHarvest: "2024-06-01",
-      progress: 45,
-    },
-    {
-      id: 3,
-      name: "Maize",
-      variety: "Hybrid 123",
-      area: "3.2 acres",
-      growthStage: "Tasseling",
-      health: "Good",
-      location: "Nashik, MH",
-      plantedDate: "2024-01-20",
-      expectedHarvest: "2024-05-20",
-      progress: 85,
-    },
-  ]);
+  const [currentCrops, setCurrentCrops] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // Mock reminders
   const reminders = [
@@ -133,6 +98,26 @@ const FarmerDashboard = () => {
       dueDate: "2024-03-18",
     },
   ];
+
+  // Fetch user crops from backend
+  useEffect(() => {
+    const fetchCrops = async () => {
+      try {
+        setIsLoading(true);
+        const crops = await getUserCrops();
+        console.log("Fetched crops:", crops);
+        setCurrentCrops(crops);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching crops:", err);
+        setError("Failed to load your crops. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCrops();
+  }, [user?.id]);
 
   // Framer animation variants
   const containerVariants = {
@@ -274,7 +259,7 @@ const FarmerDashboard = () => {
   };
 
   // Add new crop handler
-  const handleAddCrop = (e) => {
+  const handleAddCrop = async (e) => {
     e.preventDefault();
     if (!newCrop.name || !newCrop.area) return;
     const crop = {
@@ -534,6 +519,9 @@ const FarmerDashboard = () => {
                       }
                       className="input"
                     />
+                    <p className="text-xs text-gray-500">
+                      When did you plant this crop?
+                    </p>
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-emerald-600 font-medium">
@@ -550,6 +538,9 @@ const FarmerDashboard = () => {
                       }
                       className="input"
                     />
+                    <p className="text-xs text-gray-500">
+                      Leave blank for auto-calculation
+                    </p>
                   </div>
                   <div className="space-y-1">
                     <label className="text-xs text-emerald-600 font-medium">

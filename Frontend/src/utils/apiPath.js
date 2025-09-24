@@ -10,4 +10,11 @@ export const API_PATHS = {
   PLANTS: {
     ANALYZE: "/api/plants/analyze", // AI plant disease detection
   },
+
+  CROPS: {
+    GET_ALL: "/api/crops", // Get all user crops
+    ADD_CROP: "/api/crops", // Add new crop
+    UPDATE_CROP: "/api/crops/:id", // Update crop (replace :id with actual ID)
+    DELETE_CROP: "/api/crops/:id", // Delete crop (replace :id with actual ID)
+  },
 };
