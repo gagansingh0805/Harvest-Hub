@@ -64,7 +64,7 @@ const Navbar = () => {
                 <img src={logo} className="w-20 h-20" alt="Kisan Saathi Logo" />
               </div>
               <span className="text-2xl font-bold text-gray-800">
-                Kisan Saathi
+                Kisan Setu
               </span>
             </Link>
           </div>
