@@ -34,13 +34,17 @@ const Navbar = () => {
   // Dropdown items
   const featuresList = [
     { name: "Advisor Dashboard", icon: LayoutDashboard, link: "/advisor" },
-    { name: "Crop Insights", icon: Sprout, link: "/upload" },
+    { name: "Plant Health", icon: Sprout, link: "/upload" },
     { name: "Recommended Crops", icon: Shield, link: "/RecommendedCrops" },
     { name: "Weather Reports", icon: Camera, link: "/weather" },
     { name: "Government Schemes", icon: Leaf, link: "/schemes" },
     { name: "Community Support", icon: Users, link: "/farmercommunity" },
     { name: "Market Analytics", icon: BarChart3, link: "/market" },
   ];
+
+  const isFeatureActive = featuresList.some((item) =>
+    location.pathname.startsWith(item.link)
+  );
 
   const handleMouseEnter = () => {
     if (hideTimeout.current) clearTimeout(hideTimeout.current);
@@ -99,9 +103,11 @@ const Navbar = () => {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}>
               <button
-                className={`transition-all duration-200 font-medium flex items-center gap-1 ${isActive(
-                  "/advisor"
-                )}`}>
+                className={`transition-all duration-200 font-medium flex items-center gap-1 ${
+                  isFeatureActive
+                    ? "text-farm-green font-semibold"
+                    : "text-gray-700 hover:text-farm-green"
+                }`}>
                 Features
                 <span className="ml-1">▾</span>
               </button>
