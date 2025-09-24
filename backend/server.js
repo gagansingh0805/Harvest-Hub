@@ -3,8 +3,9 @@ const cors = require('cors')
 const connectDb = require("./config/db")
 
 const authRoutes = require("./routes/authRoutes")
-const plantRoutes = require( "./routes/plantRoutes")
-
+const plantRoutes = require("./routes/plantRoutes")
+const cropRoutes = require("./routes/cropRoutes")
+const weatherRoutes = require("./routes/weatherRoutes")
 
 require("dotenv").config();
 connectDb();
@@ -19,12 +20,14 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Increased limit for plant images
 
 
 //Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/plants", plantRoutes);
+app.use("/api/crops", cropRoutes);
+app.use("/api/weather", weatherRoutes);
 
 
 
