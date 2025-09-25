@@ -112,14 +112,13 @@ const MarketAnalytics = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8 pt-36">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
+          className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             Market Analytics
           </h1>
@@ -133,15 +132,13 @@ const MarketAnalytics = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
-        >
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {trends.slice(0, 4).map((trend, index) => (
             <motion.div
               key={trend.commodity}
               variants={itemVariants}
               className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
-              onClick={() => handleAnalysis(trend.commodity)}
-            >
+              onClick={() => handleAnalysis(trend.commodity)}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-900">
                   {trend.commodity}
@@ -155,8 +152,7 @@ const MarketAnalytics = () => {
                 <div
                   className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTrendColor(
                     trend.trend
-                  )}`}
-                >
+                  )}`}>
                   {trend.changePercent > 0 ? "+" : ""}
                   {trend.changePercent}%
                 </div>
@@ -170,8 +166,7 @@ const MarketAnalytics = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-lg shadow-md p-6 mb-8"
-        >
+          className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="relative">
               <Search
@@ -189,8 +184,7 @@ const MarketAnalytics = () => {
             <select
               value={selectedState}
               onChange={(e) => setSelectedState(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            >
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
               <option value="">All States</option>
               <option value="Delhi">Delhi</option>
               <option value="Punjab">Punjab</option>
@@ -200,8 +194,7 @@ const MarketAnalytics = () => {
             <select
               value={selectedCommodity}
               onChange={(e) => setSelectedCommodity(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-            >
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent">
               <option value="">All Commodities</option>
               <option value="Wheat">Wheat</option>
               <option value="Rice">Rice</option>
@@ -215,8 +208,7 @@ const MarketAnalytics = () => {
                 setSelectedCommodity("");
                 setSearchTerm("");
               }}
-              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-            >
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
               Clear Filters
             </button>
           </div>
@@ -227,8 +219,7 @@ const MarketAnalytics = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="bg-white rounded-lg shadow-md overflow-hidden"
-        >
+          className="bg-white rounded-lg shadow-md overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-900">
               Current Market Prices
@@ -278,8 +269,7 @@ const MarketAnalytics = () => {
                       className="hover:bg-gray-50 cursor-pointer"
                       onClick={() =>
                         handleAnalysis(item.commodity || item.crop)
-                      }
-                    >
+                      }>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div>
@@ -319,8 +309,7 @@ const MarketAnalytics = () => {
                         <div
                           className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTrendColor(
                             item.trend
-                          )}`}
-                        >
+                          )}`}>
                           {getTrendIcon(item.trend)}
                           <span className="ml-1">
                             {item.changePercent > 0 || item.change > 0
@@ -348,8 +337,7 @@ const MarketAnalytics = () => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-8 bg-white rounded-lg shadow-md p-6"
-          >
+            className="mt-8 bg-white rounded-lg shadow-md p-6">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">
               {analysis.commodity} Price Analysis
             </h3>

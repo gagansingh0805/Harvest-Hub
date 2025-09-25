@@ -145,11 +145,11 @@ const SchemesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 ">
       {/* Header */}
       <div className="bg-gradient-to-r from-green-600 to-green-700 text-white py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold text-center mb-4">
+          <h1 className="text-4xl font-bold text-center mb-4 pt-32">
             Government Schemes & Subsidies
           </h1>
           <p className="text-center text-green-100 max-w-2xl mx-auto">
@@ -159,7 +159,7 @@ const SchemesPage = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-10 py-8">
         {/* Filters */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -179,8 +179,7 @@ const SchemesPage = () => {
             <select
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-            >
+              onChange={(e) => setSelectedCategory(e.target.value)}>
               <option value="">All Categories</option>
               {categories.map((category) => (
                 <option key={category} value={category}>
@@ -193,8 +192,7 @@ const SchemesPage = () => {
             <select
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               value={selectedState}
-              onChange={(e) => setSelectedState(e.target.value)}
-            >
+              onChange={(e) => setSelectedState(e.target.value)}>
               <option value="">All States</option>
               {states.map((state) => (
                 <option key={state} value={state}>
@@ -230,8 +228,7 @@ const SchemesPage = () => {
                 setSelectedState("");
                 setShowUserRelevant(false);
               }}
-              className="text-sm text-green-600 hover:text-green-700"
-            >
+              className="text-sm text-green-600 hover:text-green-700">
               Clear all filters
             </button>
           </div>
@@ -244,8 +241,7 @@ const SchemesPage = () => {
               key={scheme._id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-            >
+              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
               <div className="p-6">
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
@@ -256,8 +252,7 @@ const SchemesPage = () => {
                     <span
                       className={`inline-block px-2 py-1 text-xs rounded-full ${getCategoryColor(
                         scheme.category
-                      )}`}
-                    >
+                      )}`}>
                       {scheme.category}
                     </span>
                   </div>
@@ -289,8 +284,7 @@ const SchemesPage = () => {
                           : isDeadlineNear(scheme.applicationDeadline)
                           ? "text-orange-500"
                           : ""
-                      }
-                    >
+                      }>
                       Deadline:{" "}
                       {new Date(
                         scheme.applicationDeadline
@@ -316,8 +310,7 @@ const SchemesPage = () => {
                     {scheme.eligibility.slice(0, 2).map((criteria, index) => (
                       <li
                         key={index}
-                        className="flex items-start text-xs text-gray-600"
-                      >
+                        className="flex items-start text-xs text-gray-600">
                         <CheckCircle className="h-3 w-3 mr-2 mt-0.5 text-green-500 flex-shrink-0" />
                         <span>{criteria}</span>
                       </li>
@@ -344,8 +337,7 @@ const SchemesPage = () => {
                     {...(isDeadlinePassed(scheme.applicationDeadline) && {
                       onClick: (e) => e.preventDefault(),
                       "aria-disabled": true,
-                    })}
-                  >
+                    })}>
                     <ExternalLink className="h-4 w-4 mr-2" />
                     {isDeadlinePassed(scheme.applicationDeadline)
                       ? "Deadline Passed"
@@ -376,8 +368,7 @@ const SchemesPage = () => {
                   setSelectedState("");
                   setShowUserRelevant(false);
                 }}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-              >
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
                 Clear All Filters
               </button>
             </div>

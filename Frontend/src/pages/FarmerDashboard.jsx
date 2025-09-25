@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Bell,
@@ -17,11 +17,9 @@ import fieldImg from "../assets/fieldImg.jpg";
 import AlertCard from "../components/AlertCard";
 import { UserContext } from "../context/UserProvider";
 import { getUserCrops, addCrop, updateCrop, deleteCrop } from "../api/cropApi";
-import { getUserRelevantSchemes, getAllSchemes } from "../api/schemeApi";
 
 const FarmerDashboard = () => {
-  const { user, loading } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [motivation, setMotivation] = useState("");
   const [landLocal, setLandLocal] = useState(
     () => localStorage.getItem("landAcres") || ""
@@ -62,7 +60,6 @@ const FarmerDashboard = () => {
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [showPrediction, setShowPrediction] = useState(false);
   const [currentCrops, setCurrentCrops] = useState([]);
-  const [schemes, setSchemes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -120,36 +117,6 @@ const FarmerDashboard = () => {
     };
 
     fetchCrops();
-  }, [user?.id]);
-
-  // Fetch relevant schemes for user
-  useEffect(() => {
-    const fetchSchemes = async () => {
-      try {
-        let schemesData;
-
-        if (user?.id) {
-          // Try to get user-specific schemes first if user is logged in
-          try {
-            schemesData = await getUserRelevantSchemes();
-          } catch (authError) {
-            // If authentication fails, get all schemes instead
-            schemesData = await getAllSchemes();
-          }
-        } else {
-          // If no user, just get all schemes
-          schemesData = await getAllSchemes();
-        }
-
-        setSchemes(schemesData.data || []);
-      } catch (err) {
-        console.error("Error fetching schemes:", err);
-        // Keep empty array on error - schemes are not critical
-        setSchemes([]);
-      }
-    };
-
-    fetchSchemes();
   }, [user?.id]);
 
   // Framer animation variants
@@ -354,21 +321,9 @@ const FarmerDashboard = () => {
     return sum + area;
   }, 0);
 
-  // Show loading while checking authentication
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     // <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 py-8 pt-44">
-    <div className="min-h-screen bg-emerald-50 py-8 pt-44">
+    <div className="min-h-screen bg-emerald-100 py-8 pt-44">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Professional Hero Header */}
         <motion.div
@@ -490,7 +445,7 @@ const FarmerDashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowAddCrop(!showAddCrop)}
-                className="btn-primary flex items-center gap-2">
+                className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 Add Crop
               </motion.button>
@@ -671,6 +626,9 @@ const FarmerDashboard = () => {
                       className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 focus:outline-none flex-1">
                       Cancel
                     </button>
+                  </div>
+                  <div className="col-span-full text-xs text-gray-500 mt-2">
+                    <p>* Required fields: Crop Name, Area, and Planted Date</p>
                   </div>
                 </form>
               </motion.div>
@@ -1169,8 +1127,7 @@ const FarmerDashboard = () => {
               <div className="text-sm text-blue-700">
                 <strong>Note:</strong> This prediction uses AI algorithms
                 considering market trends, seasonal factors, and historical
-                data. For production use, integrate with real agricultural APIs
-                and market data sources.
+                data.
               </div>
             </div>
           </div>
