@@ -11,21 +11,25 @@ export const addCrop = async (cropData) => {
       localStorage.getItem("token") ? "Present" : "Missing"
     );
     console.log("API URL:", API_PATHS.CROPS.ADD_CROP);
-    
+
     // Format the data to match backend expectations
     const formattedData = {
       ...cropData,
       // Ensure area is properly formatted if it contains "acres"
-      area: typeof cropData.area === 'string' && cropData.area.includes('acres')
-        ? parseFloat(cropData.area.replace(/[^\d.]/g, ''))
-        : cropData.area,
+      area:
+        typeof cropData.area === "string" && cropData.area.includes("acres")
+          ? parseFloat(cropData.area.replace(/[^\d.]/g, ""))
+          : cropData.area,
       // Make sure growthStage maps to currentStage
-      currentStage: cropData.currentStage || cropData.growthStage || "Seeded"
+      currentStage: cropData.currentStage || cropData.growthStage || "Seeded",
     };
-    
+
     console.log("Formatted crop data:", formattedData);
 
-    const response = await axiosInstance.post(API_PATHS.CROPS.ADD_CROP, formattedData);
+    const response = await axiosInstance.post(
+      API_PATHS.CROPS.ADD_CROP,
+      formattedData
+    );
     console.log("API Response:", response);
     console.log("Response data:", response.data);
     return response.data;
