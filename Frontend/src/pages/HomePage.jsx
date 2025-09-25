@@ -14,6 +14,7 @@ import aiImg from "../assets/aiImg.jpg";
 import easy_use from "../assets/easy-use.jpg";
 import { Users, Camera, Target, Headphones } from "lucide-react";
 import { motion } from "framer-motion";
+import { Tractor, AlertTriangle, CloudSun } from "lucide-react";
 
 const HomePage = () => {
   const { user } = useContext(UserContext);
@@ -121,21 +122,33 @@ const HomePage = () => {
       title: "Farm Status",
       value: "Healthy",
       status: "good",
-      icon: "🌱",
+      icon: (
+        <div className="bg-green-500 text-white rounded-full p-2.5 inline-flex shadow-md">
+          <Tractor size={28} />
+        </div>
+      ),
       description: "All crops are growing well",
     },
     pestAlerts: {
       title: "Pest Alerts",
       value: "2 Active",
       status: "warning",
-      icon: "🚨",
+      icon: (
+        <div className="bg-amber-400 text-gray-800 rounded-full p-2.5 inline-flex shadow-md">
+          <AlertTriangle size={28} />
+        </div>
+      ),
       description: "Brown spot detected in rice field",
     },
     weatherSnapshot: {
       title: "Weather Snapshot",
       value: "28°C",
       status: "info",
-      icon: "☀",
+      icon: (
+        <div className="bg-blue-500 text-yellow-300 rounded-full p-2.5 inline-flex shadow-md">
+          <CloudSun size={28} />
+        </div>
+      ),
       description: "Sunny with 60% humidity",
     },
   };
@@ -191,8 +204,7 @@ const HomePage = () => {
       <div
         className="text-white relative overflow-hidden bg-cover bg-center min-h-screen"
         loading="lazy"
-        style={{ backgroundImage: `url(${background})` }}
-      >
+        style={{ backgroundImage: `url(${background})` }}>
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="relative w-full px-4 sm:px-6 lg:px-8 py-60">
           <div className="text-center max-w-6xl mx-auto">
@@ -209,22 +221,19 @@ const HomePage = () => {
               {user ? (
                 <Link
                   to="/farmer"
-                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
-                >
+                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
                   Get Started
                 </Link>
               ) : (
                 <Link
                   to="/login"
-                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
-                >
+                  className="bg-farm-dark-green text-white font-bold py-4 px-10 rounded-xl hover:bg-gray-100 hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
                   Get Started
                 </Link>
               )}
               <Link
                 to="/learn-more"
-                className="border-2 border-white text-white font-bold py-4 px-10 rounded-xl hover:bg-white hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
-              >
+                className="border-2 border-white text-white font-bold py-4 px-10 rounded-xl hover:bg-white hover:text-farm-green transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg">
                 Learn More
               </Link>
             </div>
@@ -243,15 +252,13 @@ const HomePage = () => {
               {Object.entries(overviewData).map(([key, data]) => (
                 <div
                   key={key}
-                  className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-                >
+                  className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                   <div className="flex items-center justify-between mb-6">
                     <div className="text-4xl">{data.icon}</div>
                     <span
                       className={`px-3 py-2 rounded-full text-sm font-medium border ${getStatusColor(
                         data.status
-                      )}`}
-                    >
+                      )}`}>
                       {data.value}
                     </span>
                   </div>
@@ -288,7 +295,7 @@ const HomePage = () => {
                 ) : (
                   <WeatherCard weatherData={weatherData} />
                 )}
-                <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                {/* <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                   <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                     🌱 Recommended Crops
                   </h3>
@@ -303,7 +310,7 @@ const HomePage = () => {
                       <span>🍅</span> Tomato – Best for humid regions
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
 
               {/* Right Column → Plant Uploader */}
@@ -327,8 +334,7 @@ const HomePage = () => {
                grid-cols-1 
                md:grid-cols-2 
                lg:[grid-template-columns:2fr_1.2fr_1.2fr] 
-               lg:[grid-template-rows:repeat(6,auto)]"
-              >
+               lg:[grid-template-rows:repeat(6,auto)]">
                 {/* Div1 → Big Image left */}
                 <div className="lg:col-span-1 lg:row-span-4 overflow-hidden rounded-2xl md:rounded-3xl shadow-md h-64 md:h-full">
                   <div
@@ -425,8 +431,7 @@ const HomePage = () => {
                       whileInView={{ opacity: [0, 1], y: [30, 0] }}
                       transition={{ duration: 0.6, delay: i * 0.2 }}
                       viewport={{ once: true, amount: 0.2 }}
-                      className="relative rounded-2xl overflow-hidden group shadow-lg"
-                    >
+                      className="relative rounded-2xl overflow-hidden group shadow-lg">
                       <img
                         src={stat.img}
                         alt={stat.title}
@@ -452,12 +457,11 @@ const HomePage = () => {
                 whileInView={{ opacity: [0, 1], y: [20, 0] }}
                 transition={{ duration: 0.6, delay: 0.5 }}
                 viewport={{ once: true, amount: 0.2 }}
-                className="mt-16"
-              >
+                className="mt-16">
                 <p className="text-gray-700 text-lg font-medium mb-6 text-center">
                   Loved by thousands of farmers nationwide 🌾
                 </p>
-                <div className="flex justify-center -space-x-4 mb-6">
+                {/* <div className="flex justify-center -space-x-4 mb-6">
                   <img
                     src="https://randomuser.me/api/portraits/men/32.jpg"
                     alt="Farmer"
@@ -476,7 +480,28 @@ const HomePage = () => {
                   <div className="w-14 h-14 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-semibold border-2 border-white shadow">
                     +99
                   </div>
+                </div> */}
+                <div className="flex justify-center -space-x-4 mb-6">
+                  <img
+                    src="https://images.unsplash.com/photo-1607321809142-5364a2fc94a8?q=80&w=961&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" // Indian-looking male face
+                    alt="Indian man 1"
+                    className="w-14 h-14 rounded-full border-2 border-white shadow"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1632923057240-b6775e4db748?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" // Indian-looking male face
+                    alt="Indian man 2"
+                    className="w-14 h-14 rounded-full border-2 border-white shadow"
+                  />
+                  <img
+                    src="https://images.unsplash.com/photo-1595956481935-a9e254951d49?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" // Indian-looking male face
+                    alt="Indian man 3"
+                    className="w-14 h-14 rounded-full border-2 border-white shadow"
+                  />
+                  <div className="w-14 h-14 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-semibold border-2 border-white shadow">
+                    +99
+                  </div>
                 </div>
+
                 <div className="grid md:grid-cols-3 gap-6 text-center">
                   <div className="bg-white p-4 rounded-xl shadow hover:shadow-xl transition-all duration-300">
                     <p className="text-gray-700 italic mb-2">

@@ -313,14 +313,13 @@ const CropRecommendation = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 pt-36">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
+          className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4 flex items-center justify-center gap-3">
             <Sprout className="w-10 h-10 text-green-600" />
             Crop Recommendations
@@ -335,8 +334,7 @@ const CropRecommendation = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow-lg p-6 mb-8"
-        >
+          className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div className="flex items-center gap-3">
               <MapPin className="w-5 h-5 text-blue-600" />
@@ -382,8 +380,7 @@ const CropRecommendation = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+          className="mb-8">
           <div className="flex justify-center gap-4">
             {["current", "kharif", "rabi", "zaid"].map((season) => (
               <button
@@ -398,8 +395,7 @@ const CropRecommendation = () => {
                   selectedSeason === season
                     ? "bg-green-600 text-white shadow-lg"
                     : "bg-white text-gray-600 hover:bg-green-50 shadow-md"
-                }`}
-              >
+                }`}>
                 {season === "current"
                   ? "Current Season"
                   : season.charAt(0).toUpperCase() + season.slice(1)}
@@ -416,8 +412,7 @@ const CropRecommendation = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-            >
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               <div className="p-6">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-4">
@@ -427,8 +422,7 @@ const CropRecommendation = () => {
                   <div
                     className={`flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium ${getSuitabilityColor(
                       crop.suitability
-                    )}`}
-                  >
+                    )}`}>
                     {getSuitabilityIcon(crop.suitability)}
                     {crop.suitability}% Match
                   </div>
@@ -495,8 +489,7 @@ const CropRecommendation = () => {
                     {crop.reasons.map((reason, idx) => (
                       <li
                         key={idx}
-                        className="text-sm text-gray-600 flex items-center gap-2"
-                      >
+                        className="text-sm text-gray-600 flex items-center gap-2">
                         <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0" />
                         {reason}
                       </li>
@@ -513,8 +506,7 @@ const CropRecommendation = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-12 text-center"
-        >
+          className="mt-12 text-center">
           <div className="bg-blue-50 rounded-xl p-6">
             <h3 className="text-lg font-semibold text-blue-900 mb-2">
               📍 Location-Based Recommendations

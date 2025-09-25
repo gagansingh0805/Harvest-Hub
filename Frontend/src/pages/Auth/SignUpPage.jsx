@@ -31,7 +31,7 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 pt-36 pb-16">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center mb-5">
@@ -41,7 +41,7 @@ const SignupPage = () => {
               alt="Kisan Saathi Logo"></img>
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            Join Smart Kisan Saathi
+            Join Smart Kisan Setu
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Create your account to get started with AI-powered farming support

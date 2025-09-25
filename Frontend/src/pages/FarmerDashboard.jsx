@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Bell,
@@ -17,11 +17,9 @@ import fieldImg from "../assets/fieldImg.jpg";
 import AlertCard from "../components/AlertCard";
 import { UserContext } from "../context/UserProvider";
 import { getUserCrops, addCrop, updateCrop, deleteCrop } from "../api/cropApi";
-import { getUserRelevantSchemes, getAllSchemes } from "../api/schemeApi";
 
 const FarmerDashboard = () => {
-  const { user, loading } = useContext(UserContext);
-  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [motivation, setMotivation] = useState("");
   const [landLocal, setLandLocal] = useState(
     () => localStorage.getItem("landAcres") || ""
@@ -62,7 +60,6 @@ const FarmerDashboard = () => {
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [showPrediction, setShowPrediction] = useState(false);
   const [currentCrops, setCurrentCrops] = useState([]);
-  const [schemes, setSchemes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -122,36 +119,6 @@ const FarmerDashboard = () => {
     fetchCrops();
   }, [user?.id]);
 
-  // Fetch relevant schemes for user
-  useEffect(() => {
-    const fetchSchemes = async () => {
-      try {
-        let schemesData;
-
-        if (user?.id) {
-          // Try to get user-specific schemes first if user is logged in
-          try {
-            schemesData = await getUserRelevantSchemes();
-          } catch (authError) {
-            // If authentication fails, get all schemes instead
-            schemesData = await getAllSchemes();
-          }
-        } else {
-          // If no user, just get all schemes
-          schemesData = await getAllSchemes();
-        }
-
-        setSchemes(schemesData.data || []);
-      } catch (err) {
-        console.error("Error fetching schemes:", err);
-        // Keep empty array on error - schemes are not critical
-        setSchemes([]);
-      }
-    };
-
-    fetchSchemes();
-  }, [user?.id]);
-
   // Framer animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -195,6 +162,21 @@ const FarmerDashboard = () => {
     },
   ];
 
+  const schemes = [
+    {
+      id: 1,
+      title: "PM-Kisan Yojana",
+      benefit: "₹6000 yearly support",
+      lastDate: "2024-04-01",
+    },
+    {
+      id: 2,
+      title: "Soil Health Card",
+      benefit: "Free soil testing",
+      lastDate: "2024-05-15",
+    },
+  ];
+
   const motivationQuotes = [
     "🌾 Hard work in fields brings golden harvests.",
     "🚜 A farmer is the backbone of our nation.",
@@ -205,14 +187,14 @@ const FarmerDashboard = () => {
     const colors = {
       Good: "text-green-600 bg-green-100",
       Warning: "text-yellow-600 bg-yellow-100",
-      Poor: "text-orange-600 bg-orange-100",
+      Poor: "text-red-600 bg-red-100",
     };
     return colors[health] || colors["Good"];
   };
 
   const getPriorityColor = (priority) => {
     const colors = {
-      High: "text-orange-600 bg-orange-100",
+      High: "text-red-600 bg-red-100",
       Medium: "text-yellow-600 bg-yellow-100",
       Low: "text-green-600 bg-green-100",
     };
@@ -339,28 +321,16 @@ const FarmerDashboard = () => {
     return sum + area;
   }, 0);
 
-  // Show loading while checking authentication
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 py-8 pt-44">
+    // <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 py-8 pt-44">
+    <div className="min-h-screen bg-emerald-100 py-8 pt-44">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Professional Hero Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
-        >
+          className="mb-12">
           <div className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
             <div className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 p-8">
               <div className="flex items-center justify-between">
@@ -369,16 +339,14 @@ const FarmerDashboard = () => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="text-3xl md:text-4xl font-bold text-white mb-2"
-                  >
+                    className="text-3xl md:text-4xl font-bold text-white mb-2">
                     Welcome back, {user?.name || "Farmer"}
                   </motion.h1>
                   <motion.p
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
-                    className="text-emerald-100 text-lg"
-                  >
+                    className="text-emerald-100 text-lg">
                     {motivation ||
                       motivationQuotes[
                         Math.floor(Math.random() * motivationQuotes.length)
@@ -389,8 +357,7 @@ const FarmerDashboard = () => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                  className="hidden md:block"
-                >
+                  className="hidden md:block">
                   <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center">
                     <Sprout className="w-10 h-10 text-white" />
                   </div>
@@ -405,13 +372,11 @@ const FarmerDashboard = () => {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12"
-        >
+          className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.05, y: -5 }}
-            className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 text-center hover:shadow-xl transition-all duration-300"
-          >
+            className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 text-center hover:shadow-xl transition-all duration-300">
             <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sprout className="w-6 h-6 text-emerald-600" />
             </div>
@@ -424,8 +389,7 @@ const FarmerDashboard = () => {
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.05, y: -5 }}
-            className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 text-center hover:shadow-xl transition-all duration-300"
-          >
+            className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 text-center hover:shadow-xl transition-all duration-300">
             <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Bell className="w-6 h-6 text-orange-600" />
             </div>
@@ -440,8 +404,7 @@ const FarmerDashboard = () => {
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.05, y: -5 }}
-            className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 text-center hover:shadow-xl transition-all duration-300"
-          >
+            className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 text-center hover:shadow-xl transition-all duration-300">
             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Wallet className="w-6 h-6 text-blue-600" />
             </div>
@@ -454,8 +417,7 @@ const FarmerDashboard = () => {
           <motion.div
             variants={itemVariants}
             whileHover={{ scale: 1.05, y: -5 }}
-            className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl shadow-lg border border-emerald-200 p-6 text-center hover:shadow-xl transition-all duration-300"
-          >
+            className="bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl shadow-lg border border-emerald-200 p-6 text-center hover:shadow-xl transition-all duration-300">
             <div className="w-12 h-12 bg-emerald-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <MapPin className="w-6 h-6 text-emerald-600" />
             </div>
@@ -483,8 +445,7 @@ const FarmerDashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowAddCrop(!showAddCrop)}
-                className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none flex items-center gap-2"
-              >
+                className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 Add Crop
               </motion.button>
@@ -496,15 +457,13 @@ const FarmerDashboard = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mb-6 p-4 bg-emerald-50 rounded-lg border border-emerald-200"
-              >
+                className="mb-6 p-4 bg-emerald-50 rounded-lg border border-emerald-200">
                 <h3 className="text-lg font-semibold text-emerald-800 mb-3">
                   Add New Crop
                 </h3>
                 <form
                   onSubmit={handleAddCrop}
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-                >
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   <input
                     value={newCrop.name}
                     onChange={(e) =>
@@ -547,8 +506,7 @@ const FarmerDashboard = () => {
                     onChange={(e) =>
                       setNewCrop({ ...newCrop, currentStage: e.target.value })
                     }
-                    className="input"
-                  >
+                    className="input">
                     <option value="Seeded">Seeded</option>
                     <option value="Germination">Germination</option>
                     <option value="Vegetative">Vegetative</option>
@@ -563,8 +521,7 @@ const FarmerDashboard = () => {
                     onChange={(e) =>
                       setNewCrop({ ...newCrop, health: e.target.value })
                     }
-                    className="input"
-                  >
+                    className="input">
                     <option value="Good">Good</option>
                     <option value="Warning">Warning</option>
                     <option value="Poor">Poor</option>
@@ -625,8 +582,7 @@ const FarmerDashboard = () => {
                           harvestPurpose: e.target.value,
                         })
                       }
-                      className="input"
-                    >
+                      className="input">
                       <option value="">Select Purpose</option>
                       <option value="Food">Food</option>
                       <option value="Seed">Seed</option>
@@ -660,16 +616,14 @@ const FarmerDashboard = () => {
                       className="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition-colors focus:ring-2 focus:ring-emerald-500 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed flex-1 flex items-center justify-center gap-2"
                       disabled={
                         !newCrop.name || !newCrop.area || !newCrop.plantedDate
-                      }
-                    >
+                      }>
                       <Plus className="w-4 h-4" />
                       Add Crop
                     </button>
                     <button
                       type="button"
                       onClick={() => setShowAddCrop(false)}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 focus:outline-none flex-1"
-                    >
+                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors focus:ring-2 focus:ring-gray-400 focus:outline-none flex-1">
                       Cancel
                     </button>
                   </div>
@@ -687,11 +641,10 @@ const FarmerDashboard = () => {
               </div>
             ) : error ? (
               <div className="py-10 text-center">
-                <p className="text-orange-600">{error}</p>
+                <p className="text-red-600">{error}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
-                >
+                  className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700">
                   Retry
                 </button>
               </div>
@@ -710,8 +663,7 @@ const FarmerDashboard = () => {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="border border-gray-200 rounded-lg p-4"
-                  >
+                    className="border border-gray-200 rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center space-x-3">
                         <Sprout className="w-6 h-6 text-emerald-600" />
@@ -728,8 +680,7 @@ const FarmerDashboard = () => {
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${getHealthColor(
                             crop.health
-                          )}`}
-                        >
+                          )}`}>
                           {crop.health}
                         </span>
                         <button
@@ -750,8 +701,7 @@ const FarmerDashboard = () => {
                               }
                             }
                           }}
-                          className="p-1 text-gray-400 hover:text-red-600 transition-colors"
-                        >
+                          className="p-1 text-gray-400 hover:text-red-600 transition-colors">
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
@@ -794,8 +744,7 @@ const FarmerDashboard = () => {
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
                           className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${crop.progress}%` }}
-                        ></div>
+                          style={{ width: `${crop.progress}%` }}></div>
                       </div>
                     </div>
                     {/* 5-day Weather for this crop/location */}
@@ -810,8 +759,7 @@ const FarmerDashboard = () => {
                         ).map((d, i) => (
                           <div
                             key={i}
-                            className="p-2 bg-blue-50 rounded text-center"
-                          >
+                            className="p-2 bg-blue-50 rounded text-center">
                             <div className="text-xs font-medium">{d.day}</div>
                             <div className="text-sm font-semibold text-blue-700">
                               {d.temp}
@@ -844,8 +792,7 @@ const FarmerDashboard = () => {
               {reminders.map((reminder) => (
                 <div
                   key={reminder.id}
-                  className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg"
-                >
+                  className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
                   <div className="text-lg">
                     {reminder.type === "Task" ? (
                       <AlertTriangle className="w-5 h-5 text-amber-500" />
@@ -889,8 +836,7 @@ const FarmerDashboard = () => {
                   href={tip.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="block p-3 rounded border hover:bg-green-50 transition"
-                >
+                  className="block p-3 rounded border hover:bg-green-50 transition">
                   <div className="text-sm font-medium text-gray-800">
                     {tip.title}
                   </div>
@@ -908,41 +854,18 @@ const FarmerDashboard = () => {
             Govt. Schemes & Subsidies
           </h2>
           <div className="space-y-3">
-            {schemes.length > 0 ? (
-              schemes.slice(0, 3).map((scheme) => (
-                <Link
-                  to="/schemes"
-                  key={scheme._id}
-                  className="p-3 border rounded-lg bg-green-50 block hover:bg-green-100 transition"
-                >
-                  <h3 className="font-semibold text-green-700">
-                    {scheme.title}
-                  </h3>
-                  <p className="text-sm text-gray-700">{scheme.benefit}</p>
-                  <p className="text-xs text-gray-500">
-                    Apply before:{" "}
-                    {new Date(scheme.applicationDeadline).toLocaleDateString()}
-                  </p>
-                  <div className="mt-2">
-                    <span className="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">
-                      {scheme.category}
-                    </span>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <div className="text-center text-gray-500 py-4">
-                <p>Loading relevant schemes...</p>
-              </div>
-            )}
-            {schemes.length > 3 && (
+            {schemes.map((s) => (
               <Link
                 to="/schemes"
-                className="block text-center text-green-600 hover:text-green-700 font-medium py-2"
-              >
-                View all {schemes.length} schemes →
+                key={s.id}
+                className="p-3 border rounded-lg bg-green-50 block hover:bg-green-100 transition">
+                <h3 className="font-semibold text-green-700">{s.title}</h3>
+                <p className="text-sm text-gray-700">{s.benefit}</p>
+                <p className="text-xs text-gray-500">
+                  Apply before: {new Date(s.lastDate).toLocaleDateString()}
+                </p>
               </Link>
-            )}
+            ))}
           </div>
         </div>
 
@@ -965,8 +888,7 @@ const FarmerDashboard = () => {
               ]);
               setNewExpense({ item: "", category: "", cost: "" });
             }}
-            className="grid grid-cols-1 sm:grid-cols-5 gap-3 mb-4"
-          >
+            className="grid grid-cols-1 sm:grid-cols-5 gap-3 mb-4">
             <input
               value={newExpense.item}
               onChange={(e) =>
@@ -998,8 +920,7 @@ const FarmerDashboard = () => {
             />
             <button
               type="submit"
-              className="btn-primary flex items-center justify-center gap-1"
-            >
+              className="btn-primary flex items-center justify-center gap-1">
               <Plus className="w-4 h-4" /> Add
             </button>
             <div className="flex items-center justify-end text-sm text-gray-700">
@@ -1013,8 +934,7 @@ const FarmerDashboard = () => {
             {expenses.map((e) => (
               <div
                 key={e.id}
-                className="flex items-center justify-between p-2 border rounded"
-              >
+                className="flex items-center justify-between p-2 border rounded">
                 <div className="text-sm">
                   <div className="font-medium">
                     {e.item}{" "}
@@ -1026,8 +946,7 @@ const FarmerDashboard = () => {
                   onClick={() =>
                     setExpenses((prev) => prev.filter((x) => x.id !== e.id))
                   }
-                  className="text-red-600 hover:text-red-700"
-                >
+                  className="text-red-600 hover:text-red-700">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
@@ -1054,8 +973,7 @@ const FarmerDashboard = () => {
                   <span
                     className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(
                       rec.priority
-                    )}`}
-                  >
+                    )}`}>
                     {rec.priority}
                   </span>
                 </div>
@@ -1079,8 +997,7 @@ const FarmerDashboard = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mt-8 card border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-50"
-        >
+          className="mt-8 card border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-green-50">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-3 bg-emerald-100 rounded-full">
               <Sprout className="w-6 h-6 text-emerald-600" />
@@ -1097,8 +1014,7 @@ const FarmerDashboard = () => {
 
           <form
             onSubmit={handlePredict}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
-          >
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-emerald-700">
                 Land Area (acres)
@@ -1130,8 +1046,7 @@ const FarmerDashboard = () => {
                     ...predictionForm,
                     cropType: e.target.value,
                   })
-                }
-              >
+                }>
                 <option>Wheat</option>
                 <option>Rice</option>
                 <option>Maize</option>
@@ -1161,8 +1076,7 @@ const FarmerDashboard = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="btn-primary w-full flex items-center justify-center gap-2 text-lg py-3"
-                type="submit"
-              >
+                type="submit">
                 <Sprout className="w-5 h-5" />
                 Predict Price
               </motion.button>
@@ -1174,8 +1088,7 @@ const FarmerDashboard = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
-              className="p-6 bg-gradient-to-r from-emerald-100 to-green-100 rounded-xl border-2 border-emerald-300"
-            >
+              className="p-6 bg-gradient-to-r from-emerald-100 to-green-100 rounded-xl border-2 border-emerald-300">
               <div className="text-center">
                 <div className="text-4xl font-bold text-emerald-800 mb-2">
                   {formatCurrency(predictedPrice)}
@@ -1195,14 +1108,12 @@ const FarmerDashboard = () => {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium"
-                    onClick={() => setShowPrediction(false)}
-                  >
+                    onClick={() => setShowPrediction(false)}>
                     New Prediction
                   </motion.button>
                   <motion.button
                     whileHover={{ scale: 1.05 }}
-                    className="px-4 py-2 border border-emerald-600 text-emerald-600 rounded-lg text-sm font-medium"
-                  >
+                    className="px-4 py-2 border border-emerald-600 text-emerald-600 rounded-lg text-sm font-medium">
                     Save to Records
                   </motion.button>
                 </div>
@@ -1216,8 +1127,7 @@ const FarmerDashboard = () => {
               <div className="text-sm text-blue-700">
                 <strong>Note:</strong> This prediction uses AI algorithms
                 considering market trends, seasonal factors, and historical
-                data. For production use, integrate with real agricultural APIs
-                and market data sources.
+                data.
               </div>
             </div>
           </div>
