@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Sparkles, Leaf, Droplets, Sun, Wind } from "lucide-react";
+import { Send, Bot, User, Sparkles, Leaf, Droplets, Sun } from "lucide-react";
 import DoctorImage from "../assets/doctor.png";
 
 const DoctorAI = () => {
@@ -16,50 +16,47 @@ const DoctorAI = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  // ✅ Scroll only when new messages are added, not on first mount
   useEffect(() => {
-    scrollToBottom();
+    if (messages.length > 1) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   const getAIResponse = (userMessage) => {
     const responses = {
-      "pest": "🐛 For pest control, I recommend: 1) Neem oil spray (2ml per liter water) 2) Regular field inspection 3) Crop rotation 4) Natural predators like ladybugs. What specific pest are you dealing with?",
-      "weather": "🌤️ Weather affects crops significantly! Check soil moisture, adjust irrigation, and protect from extreme conditions. I can help with weather-based farming decisions.",
-      "soil": "🌍 Soil health is crucial! Test pH (6.0-7.5 ideal), add organic matter, use compost, and rotate crops. What soil issues are you facing?",
-      "seeds": "🌱 Quality seeds are the foundation! Choose certified seeds, check germination rate (85%+), store properly, and plant at right depth and spacing.",
-      "fertilizer": "🌿 Balanced nutrition is key! Use NPK based on soil test, organic fertilizers, and micronutrients. Avoid over-fertilization.",
-      "irrigation": "💧 Smart irrigation saves water and improves yield! Use drip irrigation, check soil moisture, and water early morning or evening.",
-      "harvest": "🌾 Harvest timing is critical! Check maturity indicators, weather forecast, and storage conditions. Proper timing ensures quality and price.",
-      "disease": "🦠 Plant diseases can devastate crops! Practice crop rotation, use disease-resistant varieties, maintain field hygiene, and apply preventive treatments.",
-      "default": "🤖 I understand you're asking about farming. I can help with crop management, pest control, soil health, weather advice, irrigation, and more. Could you be more specific about your farming challenge?"
+      "pest": "🐛 For pest control, I recommend: Neem oil spray, crop rotation, and natural predators like ladybugs.",
+      "weather": "🌤️ Weather affects crops! Adjust irrigation, monitor soil moisture, and prepare for rain or heat.",
+      "soil": "🌍 Soil health is crucial! Test pH (6.0-7.5), add compost, and rotate crops for balance.",
+      "seeds": "🌱 Quality seeds are key! Use certified seeds, check germination rate, and plant at correct depth.",
+      "fertilizer": "🌿 Balanced nutrition is essential! Use NPK as per soil test, add organics, and avoid excess.",
+      "irrigation": "💧 Drip irrigation saves water. Water early morning/evening and check soil moisture.",
+      "harvest": "🌾 Harvest timing is critical! Monitor maturity, forecast weather, and store properly.",
+      "disease": "🦠 Diseases spread fast! Rotate crops, use resistant varieties, and apply preventive sprays.",
+      "default": "🤖 I can guide you on crop management, pests, irrigation, soil, and harvest. Please be specific!"
     };
 
     const lowerMessage = userMessage.toLowerCase();
     for (const [key, response] of Object.entries(responses)) {
-      if (lowerMessage.includes(key)) {
-        return response;
-      }
+      if (lowerMessage.includes(key)) return response;
     }
     return responses.default;
   };
 
   const handleSend = () => {
     if (input.trim() === "") return;
-    
+
     const userMessage = {
       sender: "user",
       text: input,
       timestamp: new Date(),
       type: "user"
     };
-    
+
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsTyping(true);
-    
+
     setTimeout(() => {
       const aiResponse = {
         sender: "bot",
@@ -123,7 +120,7 @@ const DoctorAI = () => {
             transition={{ delay: 0.4, duration: 0.5 }}
             className="text-lg text-emerald-600 max-w-2xl mx-auto"
           >
-            Your intelligent agricultural companion powered by advanced AI. Get expert advice on crops, pests, weather, and farming techniques.
+            Your intelligent agricultural companion powered by AI. Get advice on crops, pests, weather, soil health, and farming techniques.
           </motion.p>
         </motion.div>
 
@@ -166,11 +163,6 @@ const DoctorAI = () => {
               <div>
                 <h3 className="font-semibold">AI Agricultural Expert</h3>
                 <p className="text-sm text-emerald-100">Online • Ready to help</p>
-              </div>
-              <div className="ml-auto flex gap-2">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <div className="w-3 h-3 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                <div className="w-3 h-3 bg-red-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
               </div>
             </div>
           </div>
@@ -264,30 +256,6 @@ const DoctorAI = () => {
               </motion.button>
             </div>
           </div>
-        </motion.div>
-
-        {/* Features */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.5 }}
-          className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          {[
-            { icon: Leaf, title: "Crop Management", desc: "Expert advice on planting, growing, and harvesting" },
-            { icon: Droplets, title: "Irrigation Tips", desc: "Smart water management for optimal yield" },
-            { icon: Sun, title: "Weather Analysis", desc: "Climate-based farming recommendations" }
-          ].map((feature, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-white p-6 rounded-xl shadow-lg border border-emerald-200 text-center"
-            >
-              <feature.icon className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-emerald-800 mb-2">{feature.title}</h3>
-              <p className="text-gray-600 text-sm">{feature.desc}</p>
-            </motion.div>
-          ))}
         </motion.div>
       </div>
     </div>
