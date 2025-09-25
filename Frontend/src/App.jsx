@@ -21,6 +21,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PlantUploader from "./components/PlantUploader";
 import WeatherPage from "./pages/WeatherPage.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -40,8 +41,19 @@ function App() {
         <main className="relative ">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/farmer" element={<FarmerDashboard />} />
-            <Route path="/advisor" element={<AdvisorDashboard />} />
+            <Route
+              path="/farmer"
+              element={
+                <ProtectedRoute>
+                  <FarmerDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/advisor" element={
+              <ProtectedRoute>
+                <AdvisorDashboard />
+              </ProtectedRoute>
+            } />
             <Route path="/market" element={<MarketAnalytics />} />
             <Route
               path="/crop-recommendation"
@@ -50,8 +62,16 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/learn-more" element={<LearnMore />} />
-            <Route path="/upload" element={<PlantUploader />} />
-            <Route path="/doctor-ai" element={<DoctorAI />} />
+            <Route path="/upload" element={
+              <ProtectedRoute>
+                <PlantUploader />
+              </ProtectedRoute>
+            } />
+            <Route path="/doctor-ai" element={
+              <ProtectedRoute>
+                <DoctorAI />
+              </ProtectedRoute>
+            } />
             <Route path="/weather" element={<WeatherPage />} />
             <Route path="/schemes" element={<SchemesPage />} />
           </Routes>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   Bell,
@@ -20,7 +20,8 @@ import { getUserCrops, addCrop, updateCrop, deleteCrop } from "../api/cropApi";
 import { getUserRelevantSchemes, getAllSchemes } from "../api/schemeApi";
 
 const FarmerDashboard = () => {
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
+  const navigate = useNavigate();
   const [motivation, setMotivation] = useState("");
   const [landLocal, setLandLocal] = useState(
     () => localStorage.getItem("landAcres") || ""
@@ -337,6 +338,18 @@ const FarmerDashboard = () => {
     const area = parseFloat(crop.area.replace(/[^\d.]/g, "")) || 0;
     return sum + area;
   }, 0);
+
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 py-8 pt-44">
