@@ -20,7 +20,7 @@ import SchemesPage from "./pages/SchemesPage.jsx";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PlantUploader from "./components/PlantUploader";
-import WeatherCard from "./components/WeatherCard.jsx";
+import WeatherPage from "./pages/WeatherPage.jsx";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -52,7 +52,7 @@ function App() {
             <Route path="/learn-more" element={<LearnMore />} />
             <Route path="/upload" element={<PlantUploader />} />
             <Route path="/doctor-ai" element={<DoctorAI />} />
-            <Route path="/weather" element={<WeatherCard />} />
+            <Route path="/weather" element={<WeatherPage />} />
             <Route path="/schemes" element={<SchemesPage />} />
           </Routes>
         </main>

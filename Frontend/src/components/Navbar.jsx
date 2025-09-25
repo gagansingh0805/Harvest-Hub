@@ -4,7 +4,7 @@ import { UserContext } from "../context/UserProvider";
 import logo from "../assets/logo3-removebg-preview.png";
 import {
   BarChart3,
-  Camera,
+  Cloud,
   Leaf,
   Shield,
   Sprout,
@@ -40,7 +40,7 @@ const Navbar = () => {
       icon: Shield,
       link: "/crop-recommendation",
     },
-    { name: "Weather Reports", icon: Camera, link: "/weather" },
+    { name: "Weather Reports", icon: Cloud, link: "/weather" },
     { name: "Government Schemes", icon: Leaf, link: "/schemes" },
     { name: "Community Support", icon: Users, link: "/farmercommunity" },
     { name: "Market Analytics", icon: BarChart3, link: "/market" },
