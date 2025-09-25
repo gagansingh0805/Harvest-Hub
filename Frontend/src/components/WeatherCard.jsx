@@ -1,6 +1,6 @@
 const WeatherCard = ({ weatherData }) => {
   const data = weatherData || {
-    temprature: 28,
+    temperature: 28,
     condition: "Sunny",
     humidity: 60,
     windSpeed: 12,
@@ -46,6 +46,7 @@ const WeatherCard = ({ weatherData }) => {
             <span className="font-semibold">Wind:</span> {data.windSpeed} km/h
           </div>
           <div className="text-sm text-gray-500 mt-4 bg-white/50 px-3 py-2 rounded-lg">
+            {data.location && <div className="mb-1">📍 {data.location}</div>}
             Last updated: {new Date().toLocaleTimeString()}
           </div>
         </div>

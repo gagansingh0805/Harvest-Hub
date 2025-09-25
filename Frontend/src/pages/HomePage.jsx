@@ -1,8 +1,9 @@
 import WeatherCard from "../components/WeatherCard";
 import PlantUploader from "../components/PlantUploader";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../context/UserProvider";
+import { getWeatherByCoords, getWeatherByCity } from "../api/weatherApi";
 import background from "../assets/background1.jpg";
 import sustainable from "../assets/sustainable.jpg";
 import ai_analysis from "../assets/ai-analysis.jpg";
@@ -16,6 +17,103 @@ import { motion } from "framer-motion";
 
 const HomePage = () => {
   const { user } = useContext(UserContext);
+  const [weatherData, setWeatherData] = useState(null);
+  const [locationError, setLocationError] = useState(null);
+
+  // Request location and fetch weather data
+  useEffect(() => {
+    const getLocationAndWeather = async () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log("Location:", latitude, longitude);
+
+            try {
+              // Call your backend weather API
+              const response = await getWeatherByCoords(latitude, longitude);
+              if (response.success) {
+                const data = response.data;
+                setWeatherData({
+                  temperature: parseInt(data.temperature), // Remove °C for processing
+                  condition: data.condition,
+                  humidity: parseInt(data.humidity), // Remove % for processing
+                  windSpeed: parseInt(data.windSpeed), // Remove km/h for processing
+                  location: `${data.city}, ${data.country}`,
+                  icon: data.icon,
+                });
+              }
+            } catch (error) {
+              console.error("Weather API error:", error);
+              setLocationError("Failed to fetch weather data. Using default.");
+              setWeatherData({
+                temperature: 28,
+                condition: "Sunny",
+                humidity: 60,
+                windSpeed: 12,
+                location: "Default Location",
+              });
+            }
+          },
+          async (error) => {
+            console.error("Location error:", error);
+            setLocationError("Location access denied. Using Delhi weather.");
+            try {
+              // Fallback to Delhi weather
+              const response = await getWeatherByCity("Delhi");
+              if (response.success) {
+                const data = response.data;
+                setWeatherData({
+                  temperature: parseInt(data.temperature),
+                  condition: data.condition,
+                  humidity: parseInt(data.humidity),
+                  windSpeed: parseInt(data.windSpeed),
+                  location: `${data.city}, ${data.country}`,
+                  icon: data.icon,
+                });
+              }
+            } catch (apiError) {
+              console.error("Fallback weather API error:", apiError);
+              setWeatherData({
+                temperature: 28,
+                condition: "Sunny",
+                humidity: 60,
+                windSpeed: 12,
+                location: "Default Location",
+              });
+            }
+          }
+        );
+      } else {
+        setLocationError("Geolocation not supported. Using Delhi weather.");
+        try {
+          const response = await getWeatherByCity("Delhi");
+          if (response.success) {
+            const data = response.data;
+            setWeatherData({
+              temperature: parseInt(data.temperature),
+              condition: data.condition,
+              humidity: parseInt(data.humidity),
+              windSpeed: parseInt(data.windSpeed),
+              location: `${data.city}, ${data.country}`,
+              icon: data.icon,
+            });
+          }
+        } catch (error) {
+          console.error("Weather API error:", error);
+          setWeatherData({
+            temperature: 28,
+            condition: "Sunny",
+            humidity: 60,
+            windSpeed: 12,
+            location: "Default Location",
+          });
+        }
+      }
+    };
+
+    getLocationAndWeather();
+  }, []);
 
   // Mock data for overview cards
   const overviewData = {
@@ -171,7 +269,25 @@ const HomePage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16 px-4 sm:px-6 lg:px-8">
               {/* Left Column → Weather + Recommendations */}
               <div className="grid gap-6">
-                <WeatherCard />
+                {locationError && (
+                  <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
+                    <p className="text-sm">{locationError}</p>
+                  </div>
+                )}
+                {!weatherData ? (
+                  <div className="card bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+                    <div className="flex items-center justify-center py-8">
+                      <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                        <p className="text-gray-600">
+                          Getting your location for weather data...
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <WeatherCard weatherData={weatherData} />
+                )}
                 <div className="card hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
                   <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
                     🌱 Recommended Crops
@@ -376,7 +492,9 @@ const HomePage = () => {
                       "The AI analysis is amazing! Makes farming decisions so
                       much easier."
                     </p>
-                    <p className="font-semibold text-green-600">– Sita, Punjab</p>
+                    <p className="font-semibold text-green-600">
+                      – Sita, Punjab
+                    </p>
                   </div>
                   <div className="bg-white p-4 rounded-xl shadow hover:shadow-xl transition-all duration-300">
                     <p className="text-gray-700 italic mb-2">

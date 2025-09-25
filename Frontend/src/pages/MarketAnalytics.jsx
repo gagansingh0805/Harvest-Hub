@@ -1,209 +1,380 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  BarChart3,
   MapPin,
-  IndianRupee,
-  Sprout,
-  LandPlot,
-  Leaf,
-  Store,
+  Calendar,
+  Search,
+  Filter,
+  Loader2,
 } from "lucide-react";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+  getAllMarketPrices,
+  getMarketTrends,
+  getPriceAnalysis,
+} from "../api/marketApi";
 
 const MarketAnalytics = () => {
-  const [location, setLocation] = useState("Punjab");
+  const [marketData, setMarketData] = useState([]);
+  const [trends, setTrends] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedCommodity, setSelectedCommodity] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [analysis, setAnalysis] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // ✅ Mock Data for multiple crops
-  const marketData = {
-    Punjab: [
-      {
-        crop: "Wheat",
-        seed: 750,
-        fertilizer: 1350,
-        land: 42000,
-        msp: 2300,
-      },
-      {
-        crop: "Rice",
-        seed: 800,
-        fertilizer: 1400,
-        land: 45000,
-        msp: 2500,
-      },
-      {
-        crop: "Maize",
-        seed: 700,
-        fertilizer: 1300,
-        land: 40000,
-        msp: 2200,
-      },
-    ],
-    Haryana: [
-      {
-        crop: "Wheat",
-        seed: 720,
-        fertilizer: 1300,
-        land: 40000,
-        msp: 2250,
-      },
-      {
-        crop: "Rice",
-        seed: 780,
-        fertilizer: 1380,
-        land: 43000,
-        msp: 2450,
-      },
-      {
-        crop: "Maize",
-        seed: 680,
-        fertilizer: 1250,
-        land: 38000,
-        msp: 2100,
-      },
-    ],
-    UP: [
-      {
-        crop: "Wheat",
-        seed: 700,
-        fertilizer: 1280,
-        land: 35000,
-        msp: 2100,
-      },
-      {
-        crop: "Rice",
-        seed: 750,
-        fertilizer: 1350,
-        land: 37000,
-        msp: 2300,
-      },
-      {
-        crop: "Maize",
-        seed: 650,
-        fertilizer: 1200,
-        land: 33000,
-        msp: 2000,
-      },
-    ],
+  useEffect(() => {
+    fetchMarketData();
+    fetchTrends();
+  }, [selectedState, selectedCommodity]);
+
+  const fetchMarketData = async () => {
+    try {
+      console.log("🔄 Fetching market data...");
+      setIsLoading(true);
+      const filters = {};
+      if (selectedState) filters.state = selectedState;
+      if (selectedCommodity) filters.commodity = selectedCommodity;
+
+      console.log("📡 API Call filters:", filters);
+      const response = await getAllMarketPrices(filters);
+      console.log("✅ API Response:", response);
+      setMarketData(response.data || []);
+    } catch (error) {
+      console.error("❌ Error fetching market data:", error);
+      setMarketData([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchTrends = async () => {
+    try {
+      const response = await getMarketTrends();
+      setTrends(response.data || []);
+    } catch (error) {
+      console.error("Error fetching trends:", error);
+      setTrends([]);
+    }
+  };
+
+  const handleAnalysis = async (commodity) => {
+    try {
+      const response = await getPriceAnalysis(commodity);
+      setAnalysis(response.data);
+    } catch (error) {
+      console.error("Error fetching analysis:", error);
+    }
+  };
+
+  const getTrendIcon = (trend) => {
+    switch (trend) {
+      case "up":
+        return <TrendingUp className="text-green-500" size={20} />;
+      case "down":
+        return <TrendingDown className="text-red-500" size={20} />;
+      default:
+        return <BarChart3 className="text-gray-500" size={20} />;
+    }
+  };
+
+  const getTrendColor = (trend) => {
+    switch (trend) {
+      case "up":
+        return "text-green-600 bg-green-100";
+      case "down":
+        return "text-red-600 bg-red-100";
+      default:
+        return "text-gray-600 bg-gray-100";
+    }
+  };
+
+  const filteredData = marketData.filter(
+    (item) =>
+      (item.commodity || item.crop || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (item.market || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.state || "").toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
   };
 
   return (
-    <div className="min-h-screen bg-green-50 p-6 pt-36 md:p-12 md:pt-36">
-      {/* Heading */}
-      <div className="text-center mb-12">
-        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-800 mb-4">
-          Market Analytics
-        </h1>
-        <p className="text-gray-600 max-w-3xl mx-auto text-lg md:text-xl">
-          Check the latest prices of seeds, fertilizers, land leases, and
-          government MSPs for multiple crops in your region.
-        </p>
-      </div>
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-8"
+        >
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Market Analytics
+          </h1>
+          <p className="text-lg text-gray-600">
+            Real-time crop prices and market insights for better decision making
+          </p>
+        </motion.div>
 
-      {/* Location Selector */}
-      <div className="flex justify-center mb-12">
-        <div className="relative w-[240px]">
-          <MapPin className="absolute top-2 left-3 w-5 h-5 text-green-600" />
-          <select
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-green-500 bg-white text-gray-700 font-medium cursor-pointer">
-            <option value="Punjab">Punjab</option>
-            <option value="Haryana">Haryana</option>
-            <option value="UP">Uttar Pradesh</option>
-          </select>
-        </div>
-      </div>
+        {/* Market Trends Overview */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+        >
+          {trends.slice(0, 4).map((trend, index) => (
+            <motion.div
+              key={trend.commodity}
+              variants={itemVariants}
+              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              onClick={() => handleAnalysis(trend.commodity)}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {trend.commodity}
+                </h3>
+                {getTrendIcon(trend.trend)}
+              </div>
+              <div className="space-y-2">
+                <div className="text-2xl font-bold text-gray-900">
+                  ₹{trend.currentPrice}
+                </div>
+                <div
+                  className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTrendColor(
+                    trend.trend
+                  )}`}
+                >
+                  {trend.changePercent > 0 ? "+" : ""}
+                  {trend.changePercent}%
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
 
-      {/* Crop Cards */}
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12">
-        {marketData[location].map((cropData, idx) => (
-          <div
-            key={idx}
-            className="bg-white rounded-3xl shadow-md hover:shadow-xl transition p-6 flex flex-col gap-5">
-            <h2 className="text-2xl font-bold text-gray-800">
-              {cropData.crop}
-            </h2>
-            {/* Seed */}
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Sprout className="w-5 h-5 text-green-600" />
-                <span className="font-medium text-gray-700">Seed (10kg)</span>
-              </div>
-              <div className="flex items-center gap-1 text-green-600 font-semibold">
-                <IndianRupee className="w-4 h-4" />
-                {cropData.seed.toLocaleString("en-IN")}
-              </div>
+        {/* Filters and Search */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-white rounded-lg shadow-md p-6 mb-8"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="relative">
+              <Search
+                className="absolute left-3 top-3 text-gray-400"
+                size={20}
+              />
+              <input
+                type="text"
+                placeholder="Search commodity or market..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              />
             </div>
-
-            {/* Fertilizer */}
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Leaf className="w-5 h-5 text-green-600" />
-                <span className="font-medium text-gray-700">
-                  Fertilizer (per bag)
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-green-600 font-semibold">
-                <IndianRupee className="w-4 h-4" />
-                {cropData.fertilizer.toLocaleString("en-IN")}
-              </div>
-            </div>
-
-            {/* Land */}
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <LandPlot className="w-5 h-5 text-green-600" />
-                <span className="font-medium text-gray-700">
-                  Land Lease (per acre)
-                </span>
-              </div>
-              <div className="flex items-center gap-1 text-green-600 font-semibold">
-                <IndianRupee className="w-4 h-4" />
-                {cropData.land.toLocaleString("en-IN")}
-              </div>
-            </div>
-
-            {/* MSP */}
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Store className="w-5 h-5 text-green-600" />
-                <span className="font-medium text-gray-700">Govt. MSP</span>
-              </div>
-              <div className="flex items-center gap-1 text-green-600 font-semibold">
-                <IndianRupee className="w-4 h-4" />
-                {cropData.msp.toLocaleString("en-IN")}
-              </div>
-            </div>
+            <select
+              value={selectedState}
+              onChange={(e) => setSelectedState(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            >
+              <option value="">All States</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Punjab">Punjab</option>
+              <option value="Haryana">Haryana</option>
+              <option value="Uttar Pradesh">Uttar Pradesh</option>
+            </select>
+            <select
+              value={selectedCommodity}
+              onChange={(e) => setSelectedCommodity(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            >
+              <option value="">All Commodities</option>
+              <option value="Wheat">Wheat</option>
+              <option value="Rice">Rice</option>
+              <option value="Onion">Onion</option>
+              <option value="Potato">Potato</option>
+              <option value="Tomato">Tomato</option>
+            </select>
+            <button
+              onClick={() => {
+                setSelectedState("");
+                setSelectedCommodity("");
+                setSearchTerm("");
+              }}
+              className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+            >
+              Clear Filters
+            </button>
           </div>
-        ))}
-      </div>
+        </motion.div>
 
-      {/* Chart Section */}
-      <div className="bg-white rounded-3xl shadow-lg p-6 md:p-10">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-6">
-          Price Comparison by Crop
-        </h2>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart
-            data={marketData[location]}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
-            <XAxis dataKey="crop" tick={{ fontSize: 12 }} />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="seed" fill="#16a34a" radius={[8, 8, 0, 0]} />
-            <Bar dataKey="fertilizer" fill="#22c55e" radius={[8, 8, 0, 0]} />
-            <Bar dataKey="land" fill="#84cc16" radius={[8, 8, 0, 0]} />
-            <Bar dataKey="msp" fill="#a3e635" radius={[8, 8, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+        {/* Market Data Table */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white rounded-lg shadow-md overflow-hidden"
+        >
+          <div className="px-6 py-4 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Current Market Prices
+            </h2>
+            <p className="text-sm text-gray-600 mt-1">
+              Live prices from major mandis across India
+            </p>
+          </div>
+
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="animate-spin text-green-600" size={32} />
+              <span className="ml-2 text-gray-600">Loading market data...</span>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Commodity
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Market
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      State
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Modal Price
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Range
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Trend
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredData.map((item, index) => (
+                    <motion.tr
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      className="hover:bg-gray-50 cursor-pointer"
+                      onClick={() =>
+                        handleAnalysis(item.commodity || item.crop)
+                      }
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {item.commodity || item.crop}
+                            </div>
+                            <div className="text-sm text-gray-500">
+                              {item.variety}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <MapPin className="text-gray-400 mr-1" size={16} />
+                          <span className="text-sm text-gray-900">
+                            {item.market}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {item.state}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">
+                          ₹{item.modalPrice || item.price}
+                          <span className="text-xs text-gray-500 ml-1">
+                            /{item.unit || "Quintal"}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        ₹{item.minPrice || item.price - 100} - ₹
+                        {item.maxPrice || item.price + 100}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div
+                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getTrendColor(
+                            item.trend
+                          )}`}
+                        >
+                          {getTrendIcon(item.trend)}
+                          <span className="ml-1">
+                            {item.changePercent > 0 || item.change > 0
+                              ? "+"
+                              : ""}
+                            {item.changePercent ||
+                              Math.round(
+                                (item.change / (item.price - item.change)) * 100
+                              ) ||
+                              0}
+                            %
+                          </span>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Analysis Modal/Section */}
+        {analysis && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-8 bg-white rounded-lg shadow-md p-6"
+          >
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              {analysis.commodity} Price Analysis
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">
+                  ₹{analysis.averagePrice}
+                </div>
+                <div className="text-sm text-gray-600">Average Price</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">
+                  {analysis.markets}
+                </div>
+                <div className="text-sm text-gray-600">Markets Tracked</div>
+              </div>
+              <div className="text-center">
+                <div className="text-sm font-medium text-gray-900">
+                  {analysis.recommendation}
+                </div>
+                <div className="text-xs text-gray-600">AI Recommendation</div>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );

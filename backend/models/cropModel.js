@@ -48,27 +48,29 @@ const cropSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      default: ""
+      default: "",
     },
     progress: {
       type: Number,
       min: 0,
       max: 100,
-      default: 0
+      default: 0,
     },
     harvestPurpose: {
       type: String,
       enum: ["Food", "Seed", "Feed", "Commercial", "Processing", ""],
-      default: ""
+      default: "",
     },
     weather: {
-      type: [{
-        day: String,
-        temp: String,
-        rain: String,
-        wind: String
-      }],
-      default: []
+      type: [
+        {
+          day: String,
+          temp: String,
+          rain: String,
+          wind: String,
+        },
+      ],
+      default: [],
     },
     notes: {
       type: String,

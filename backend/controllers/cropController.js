@@ -11,9 +11,13 @@ const getUserCrops = async (req, res) => {
     // Format crops for frontend
     const formattedCrops = crops.map((crop) => {
       // Generate weather forecast if not already present
-      const weather = crop.weather && crop.weather.length ? 
-        crop.weather : 
-        generateWeatherForecast(crop.location, crop._id.toString().substring(0,8));
+      const weather =
+        crop.weather && crop.weather.length
+          ? crop.weather
+          : generateWeatherForecast(
+              crop.location,
+              crop._id.toString().substring(0, 8)
+            );
 
       return {
         id: crop._id,
@@ -62,20 +66,20 @@ const addCrop = async (req, res) => {
       });
     }
 
-    const { 
-      name, 
-      variety, 
-      area, 
-      plantedDate, 
-      currentStage, 
+    const {
+      name,
+      variety,
+      area,
+      plantedDate,
+      currentStage,
       health,
       location,
       progress,
-      harvestPurpose, 
+      harvestPurpose,
       expectedHarvest,
-      notes 
+      notes,
     } = req.body;
-    
+
     console.log("Extracted values:", {
       name,
       variety,
@@ -98,13 +102,15 @@ const addCrop = async (req, res) => {
     }
 
     // Calculate expected harvest date if not provided
-    const expectedHarvestDate = expectedHarvest || calculateExpectedHarvest(plantedDate, name);
+    const expectedHarvestDate =
+      expectedHarvest || calculateExpectedHarvest(plantedDate, name);
     console.log("Calculated harvest date:", expectedHarvestDate);
 
     // Process area to extract just the number if it contains "acres"
-    const numericArea = typeof area === 'string' && area.includes('acres') 
-      ? parseFloat(area.replace(/[^0-9.]/g, ''))
-      : parseFloat(area);
+    const numericArea =
+      typeof area === "string" && area.includes("acres")
+        ? parseFloat(area.replace(/[^0-9.]/g, ""))
+        : parseFloat(area);
 
     // Generate weather forecast
     const weather = generateWeatherForecast(location);
@@ -119,7 +125,10 @@ const addCrop = async (req, res) => {
       currentStage: currentStage || "Seeded",
       health: health || "Good",
       location: location || "",
-      progress: progress !== undefined ? parseInt(progress) : calculateProgress(currentStage),
+      progress:
+        progress !== undefined
+          ? parseInt(progress)
+          : calculateProgress(currentStage),
       harvestPurpose: harvestPurpose || "",
       weather: weather,
       notes,
@@ -157,17 +166,21 @@ const updateCrop = async (req, res) => {
     const userId = req.user.id;
     const { cropId } = req.params;
     const updateData = req.body;
-    
+
     // Process area if it's a string with "acres"
-    if (updateData.area && typeof updateData.area === 'string' && updateData.area.includes('acres')) {
-      updateData.area = parseFloat(updateData.area.replace(/[^0-9.]/g, ''));
+    if (
+      updateData.area &&
+      typeof updateData.area === "string" &&
+      updateData.area.includes("acres")
+    ) {
+      updateData.area = parseFloat(updateData.area.replace(/[^0-9.]/g, ""));
     }
-    
+
     // Update progress based on growth stage if it was changed
     if (updateData.currentStage && !updateData.progress) {
       updateData.progress = calculateProgress(updateData.currentStage);
     }
-    
+
     // Update weather data if location changed
     if (updateData.location) {
       updateData.weather = generateWeatherForecast(updateData.location);
@@ -184,9 +197,13 @@ const updateCrop = async (req, res) => {
     }
 
     // Get or generate weather data
-    const weather = crop.weather && crop.weather.length ? 
-      crop.weather : 
-      generateWeatherForecast(crop.location, crop._id.toString().substring(0,8));
+    const weather =
+      crop.weather && crop.weather.length
+        ? crop.weather
+        : generateWeatherForecast(
+            crop.location,
+            crop._id.toString().substring(0, 8)
+          );
 
     // Format response
     const formattedCrop = {
@@ -238,10 +255,14 @@ const deleteCrop = async (req, res) => {
 // Helper functions
 const calculateProgress = (stage, providedProgress) => {
   // If a specific progress value was provided, use it
-  if (typeof providedProgress === 'number' && providedProgress >= 0 && providedProgress <= 100) {
+  if (
+    typeof providedProgress === "number" &&
+    providedProgress >= 0 &&
+    providedProgress <= 100
+  ) {
     return providedProgress;
   }
-  
+
   // Otherwise calculate based on stage
   const stageProgress = {
     Seeded: 10,
@@ -282,22 +303,23 @@ const calculateExpectedHarvest = (plantedDate, cropType) => {
 const generateWeatherForecast = (location, seed) => {
   const days = ["Day 1", "Day 2", "Day 3", "Day 4", "Day 5"];
   // Use location string to generate a consistent seed for that location
-  const locationSeed = location ? 
-    location.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) : 0;
-  
+  const locationSeed = location
+    ? location.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0)
+    : 0;
+
   // Combine with provided seed or use location seed
   const finalSeed = seed || locationSeed;
-  
+
   return days.map((d, idx) => {
     const base = (finalSeed + idx * 7) % 30;
     const temp = 22 + ((base * 3) % 10);
     const rain = (base * 13) % 100;
     const wind = 6 + ((base * 2) % 10);
-    return { 
-      day: d, 
-      temp: `${temp}°C`, 
-      rain: `${rain}%`, 
-      wind: `${wind} km/h` 
+    return {
+      day: d,
+      temp: `${temp}°C`,
+      rain: `${rain}%`,
+      wind: `${wind} km/h`,
     };
   });
 };
