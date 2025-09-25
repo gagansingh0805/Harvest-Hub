@@ -766,7 +766,6 @@ const FarmerDashboard = () => {
               <div className="text-blue-600 mt-0.5">💡</div>
               <div className="text-sm text-blue-700">
                 <strong>Note:</strong> This prediction uses AI algorithms considering market trends, seasonal factors, and historical data. 
-                For production use, integrate with real agricultural APIs and market data sources.
               </div>
             </div>
           </div>
