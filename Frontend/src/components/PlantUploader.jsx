@@ -58,11 +58,11 @@ const PlantUploader = () => {
   };
 
   return (
-    <div className="card">
+    <div className="card" style={{ scrollBehavior: "smooth" }}>
       <h2 className="text-2xl font-bold text-gray-800 text-center">
         Upload Plant Image for AI Analysis
       </h2>
-      <div className="p-4 rounded-xl  mx-auto ">
+      <div className="p-4 rounded-xl mx-auto">
         {!user && (
           <p className="text-red-500 mb-4 text-center">
             You must be logged in to upload images.

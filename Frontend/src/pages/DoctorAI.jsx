@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Sparkles, Leaf, Droplets, Sun } from "lucide-react";
+import { Send, Bot, User, Sparkles, Leaf, Droplets, Sun, Globe } from "lucide-react";
 import DoctorImage from "../assets/doctor.png";
+import { askDoctorAI } from "../api/doctorApi";
 
 const DoctorAI = () => {
   const [messages, setMessages] = useState([
@@ -14,36 +15,32 @@ const DoctorAI = () => {
   ]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("hinglish");
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
+  const inputRef = useRef(null);
+
+  const languages = [
+    { value: "hinglish", label: "Hinglish (हिंग्लिश)", flag: "🇮🇳" },
+    { value: "hindi", label: "Hindi (हिंदी)", flag: "🇮🇳" },
+    { value: "english", label: "English", flag: "🇬🇧" },
+    { value: "punjabi", label: "Punjabi (ਪੰਜਾਬੀ)", flag: "🇮🇳" },
+    { value: "tamil", label: "Tamil (தமிழ்)", flag: "🇮🇳" },
+    { value: "telugu", label: "Telugu (తెలుగు)", flag: "🇮🇳" },
+  ];
 
   // ✅ Scroll only when new messages are added, not on first mount
   useEffect(() => {
-    if (messages.length > 1) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length > 1 && messagesContainerRef.current) {
+      // Scroll to bottom smoothly
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth"
+      });
     }
-  }, [messages]);
+  }, [messages, isTyping]);
 
-  const getAIResponse = (userMessage) => {
-    const responses = {
-      "pest": "🐛 For pest control, I recommend: Neem oil spray, crop rotation, and natural predators like ladybugs.",
-      "weather": "🌤️ Weather affects crops! Adjust irrigation, monitor soil moisture, and prepare for rain or heat.",
-      "soil": "🌍 Soil health is crucial! Test pH (6.0-7.5), add compost, and rotate crops for balance.",
-      "seeds": "🌱 Quality seeds are key! Use certified seeds, check germination rate, and plant at correct depth.",
-      "fertilizer": "🌿 Balanced nutrition is essential! Use NPK as per soil test, add organics, and avoid excess.",
-      "irrigation": "💧 Drip irrigation saves water. Water early morning/evening and check soil moisture.",
-      "harvest": "🌾 Harvest timing is critical! Monitor maturity, forecast weather, and store properly.",
-      "disease": "🦠 Diseases spread fast! Rotate crops, use resistant varieties, and apply preventive sprays.",
-      "default": "🤖 I can guide you on crop management, pests, irrigation, soil, and harvest. Please be specific!"
-    };
-
-    const lowerMessage = userMessage.toLowerCase();
-    for (const [key, response] of Object.entries(responses)) {
-      if (lowerMessage.includes(key)) return response;
-    }
-    return responses.default;
-  };
-
-  const handleSend = () => {
+  const handleSend = async () => {
     if (input.trim() === "") return;
 
     const userMessage = {
@@ -54,19 +51,32 @@ const DoctorAI = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const question = input;
     setInput("");
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      const response = await askDoctorAI(question, selectedLanguage);
+      
       const aiResponse = {
         sender: "bot",
-        text: getAIResponse(input),
+        text: response.reply || "Sorry, I couldn't generate a response. Please try again.",
         timestamp: new Date(),
         type: "ai"
       };
       setMessages(prev => [...prev, aiResponse]);
+    } catch (error) {
+      console.error("Error getting AI response:", error);
+      const errorResponse = {
+        sender: "bot",
+        text: "Sorry, I encountered an error. Please try again later.",
+        timestamp: new Date(),
+        type: "ai"
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsTyping(false);
-    }, 1500 + Math.random() * 1000);
+    }
   };
 
   const quickQuestions = [
@@ -112,7 +122,7 @@ const DoctorAI = () => {
             transition={{ delay: 0.2, duration: 0.5 }}
             className="text-4xl font-bold text-emerald-800 mt-4 mb-2"
           >
-            Kisan Setu AI Expert
+            HarvestHub AI Expert
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
@@ -156,19 +166,45 @@ const DoctorAI = () => {
         >
           {/* Chat Header */}
           <div className="bg-gradient-to-r from-emerald-500 to-green-600 p-4 text-white">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                <Bot className="w-6 h-6" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                  <Bot className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-semibold">AI Agricultural Expert</h3>
+                  <p className="text-sm text-emerald-100">Online • Ready to help</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-semibold">AI Agricultural Expert</h3>
-                <p className="text-sm text-emerald-100">Online • Ready to help</p>
+              {/* Language Dropdown */}
+              <div className="relative">
+                <select
+                  value={selectedLanguage}
+                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                  className="bg-white/20 backdrop-blur-sm text-white border border-white/30 rounded-lg px-4 py-2 pr-8 appearance-none cursor-pointer hover:bg-white/30 transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 0.75rem center',
+                    paddingRight: '2.5rem'
+                  }}
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.value} value={lang.value} className="text-gray-800">
+                      {lang.flag} {lang.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>
 
           {/* Messages */}
-          <div className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          <div 
+            ref={messagesContainerRef}
+            className="h-96 overflow-y-auto p-4 space-y-4 bg-gray-50"
+            style={{ scrollBehavior: "smooth" }}
+          >
             <AnimatePresence>
               {messages.map((msg, index) => (
                 <motion.div
@@ -231,11 +267,24 @@ const DoctorAI = () => {
             <div className="flex gap-3">
               <div className="flex-1 relative">
                 <input
+                  ref={inputRef}
                   type="text"
                   placeholder="Ask about crops, pests, weather, soil health..."
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  onFocus={(e) => {
+                    // Prevent page scroll when input is focused
+                    const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+                    setTimeout(() => {
+                      window.scrollTo(0, currentScroll);
+                    }, 0);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
                   className="w-full p-3 pr-12 border border-emerald-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                 />
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-1">

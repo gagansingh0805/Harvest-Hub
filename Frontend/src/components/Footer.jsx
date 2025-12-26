@@ -54,15 +54,15 @@ const Footer = () => {
                 <img
                   src={logo}
                   className=" w-16 h-16"
-                  alt="Kisan Saathi Logo"></img>
+                  alt="HarvestHub Logo"></img>
               </div>
               <span className="text-2xl text-white font-semibold">
-                Kisan Setu
+                HarvestHub
               </span>
             </Link>
             <p className="text-slate-300 mb-6 leading-relaxed">
               Empowering every farmer with smart, AI-driven insights. Monitor
-              crops, prevent pests, and grow sustainably with Kisan Saathi.
+              crops, prevent pests, and grow sustainably with HarvestHub.
             </p>
             <div className="flex space-x-4">
               {socialLinks.map((social) => {
@@ -130,7 +130,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-slate-300">
                 <Mail className="w-5 h-5 text-slate-400 flex-shrink-0" />
-                <span>KisanSetu@gmail.com</span>
+                <span>HarvestHub@gmail.com</span>
               </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ const Footer = () => {
         <div className="py-6 border-t border-slate-700">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-slate-400 text-sm">
-              © 2025 Kisan Setu. All rights reserved.
+              © 2025 HarvestHub. All rights reserved.
             </p>
             <div className="flex space-x-6">
               {footerLinks.legal.map((link) => (

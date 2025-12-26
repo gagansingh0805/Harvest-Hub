@@ -211,7 +211,7 @@ const HomePage = () => {
             <h2 className="text-3xl md:text-7xl font-bold text-header mb-4">
               <span className="text-[#ffffff] drop-shadow-lg">Welcome to</span>{" "}
               <span className="bg-amber-500 bg-clip-text text-transparent drop-shadow-lg">
-                Kisan Setu
+                HarvestHub
               </span>
             </h2>
             <p className="text-xl md:text-3xl mb-12 text-green-100 drop-shadow-md max-w-4xl mx-auto">
@@ -326,7 +326,7 @@ const HomePage = () => {
           <div className="bg-[#088124] p-6 md:p-12 w-screen">
             <div className="max-w-7xl items-center justify-center mx-auto">
               <h2 className="text-3xl md:text-5xl font-bold text-amber-500 mb-12 text-center">
-                Why Choose Kisan Saathi?
+                Why Choose HarvestHub?
               </h2>
 
               <div
@@ -505,7 +505,7 @@ const HomePage = () => {
                 <div className="grid md:grid-cols-3 gap-6 text-center">
                   <div className="bg-white p-4 rounded-xl shadow hover:shadow-xl transition-all duration-300">
                     <p className="text-gray-700 italic mb-2">
-                      "Kisan Setu helped me detect crop diseases early and save
+                      "HarvestHub helped me detect crop diseases early and save
                       my harvest!"
                     </p>
                     <p className="font-semibold text-green-600">

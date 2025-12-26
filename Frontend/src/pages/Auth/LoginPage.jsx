@@ -41,7 +41,7 @@ const LoginPage = () => {
           <img
             src={logo}
             className=" w-[140px] h-[140px] rounded-2xl"
-            alt="Kisan Saathi Logo"></img>
+            alt="HarvestHub Logo"></img>
           {/* </div> */}
         </div>
         <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">

@@ -7,16 +7,16 @@ const LearnMore = () => {
         {/* Learn More Section */}
         <div className="section-gradient rounded-3xl p-12">
           <h2 className="text-4xl font-bold text-gray-800 mb-12 text-center">
-            Learn More About Kisan Saathi
+            Learn More About HarvestHub
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-lg text-gray-700 leading-relaxed">
             <div>
               <h3 className="text-2xl font-semibold text-farm-dark-green mb-4">
-                🚜 What is Kisan Saathi?
+                🚜 What is HarvestHub?
               </h3>
               <p className="mb-6">
-                Kisan Saathi is your AI-powered digital farming partner. It
+                HarvestHub is your AI-powered digital farming partner. It
                 helps farmers detect crop health, pests, and diseases early,
                 provides irrigation guidance, and offers localized weather
                 updates.

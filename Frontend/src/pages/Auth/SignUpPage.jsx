@@ -38,10 +38,10 @@ const SignupPage = () => {
             <img
               src={logo}
               className=" w-[140px] h-[140px] rounded-2xl"
-              alt="Kisan Saathi Logo"></img>
+              alt="HarvestHub Logo"></img>
           </div>
           <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            Join Smart Kisan Setu
+            Join Smart HarvestHub
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
             Create your account to get started with AI-powered farming support

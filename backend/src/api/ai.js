@@ -9,7 +9,7 @@ export async function askDoctorAI(question) {
   const response = await client.chat.completions.create({
     model: "gpt-3.5-turbo", // or "gpt-4o-mini" if you have access
     messages: [
-      { role: "system", content: "You are Kisan Doctor AI. Give advice to farmers about seeds, crops, and farming in simple Hindi-English mix." },
+      { role: "system", content: "You are NextGen Doctor AI. Give advice to farmers about seeds, crops, and farming in simple Hindi-English mix." },
       { role: "user", content: question }
     ]
   });

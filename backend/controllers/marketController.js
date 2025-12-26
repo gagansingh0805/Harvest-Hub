@@ -18,6 +18,20 @@ const INDIAN_API_CONFIG = {
   },
 };
 
+// Alpha Vantage API Configuration
+const API_CONFIG = {
+  ALPHA_VANTAGE: {
+    BASE_URL: "https://www.alphavantage.co/query",
+    API_KEY: process.env.ALPHA_VANTAGE_API_KEY || "",
+    COMMODITIES: ["WHEAT", "CORN", "SOYBEAN", "RICE", "SUGAR"],
+  },
+  COMMODITIES_API: {
+    BASE_URL: "https://api.commodities-api.com/v1/latest",
+    API_KEY: process.env.COMMODITIES_API_KEY || "",
+    SYMBOLS: "WHEAT,CORN,SOYBEAN,RICE,SUGAR",
+  },
+};
+
 // Indian Agricultural Mock Data (Temporary - will auto-switch to real API when key is added)
 const mockIndianMarketData = [
   {

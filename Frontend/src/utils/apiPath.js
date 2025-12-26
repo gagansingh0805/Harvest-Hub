@@ -22,4 +22,8 @@ export const API_PATHS = {
     GET_WEATHER: "/api/weather/current", // Get weather data
     GET_FORECAST: "/api/weather/forecast", // Get weather forecast
   },
+
+  DOCTOR: {
+    ASK: "/api/doctor/ask", // Ask Doctor AI a question
+  },
 };

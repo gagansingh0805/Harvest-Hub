@@ -69,10 +69,10 @@ const Navbar = () => {
           <div className="flex items-center -ml-5">
             <Link to="/" className="flex items-center space-x-0">
               <div className="flex items-center justify-center">
-                <img src={logo} className="w-20 h-20" alt="Kisan Saathi Logo" />
+                <img src={logo} className="w-20 h-20" alt="HarvestHub Logo" />
               </div>
               <span className="text-2xl font-bold text-gray-800">
-                Kisan Setu
+                HarvestHub
               </span>
             </Link>
           </div>
